@@ -4,13 +4,14 @@ package GOFO2;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
 
-public class Administrator extends User implements ActionListener {
+public class Administrator extends User implements ActionListener, MouseListener {
 	
-	public static ArrayList <Playground> playground = new ArrayList();
 	String[] data = new String[20];
 	
 	JFrame frame = new JFrame();
@@ -25,6 +26,7 @@ public class Administrator extends User implements ActionListener {
 	JLabel label6 = new JLabel("Price Per Hour");
 	JLabel label7 = new JLabel("Cancellation Period");
 	JLabel label8 = new JLabel("Slots");
+	JLabel logout = new JLabel("logout");
 	JTextField text = new JTextField();
 	JButton button = new JButton("Playgrounds");
 	JButton button2 = new JButton("Go");
@@ -62,10 +64,15 @@ public class Administrator extends User implements ActionListener {
 		label.setFont (label.getFont ().deriveFont (23f));
 		label.setBounds(80, 50, 130, 50);
 		
+		logout.setForeground(Color.WHITE);
+		logout.setBounds(120, 300, 130, 50);
+		
 		frame.add(panel);
 		panel.add(button);
 		panel.add(label);
+		panel.add(logout);
 		
+		logout.addMouseListener(this);
 		button.addActionListener(this);
 	}
 	
@@ -88,19 +95,27 @@ public class Administrator extends User implements ActionListener {
 	 * @param index is the index of the playground which the admin wants to delete
 	 */
 	public void deletePlayground(int index) {
-		playground.remove(index-1);
-		for (int i = index-1 ; i < data.length-1 ; i++) {
+		AvailablePlaygrounds.playgrounds.remove(index-1);
+		for (int i = index-1 ; i < AvailablePlaygrounds.playgrounds.size() ; i++) {
 			data[i] = data[i+1];
 		}
-		data[data.length-1] = null;
+		//storePlaygroundsTitle();
+		data[AvailablePlaygrounds.playgrounds.size()] = null;
+		//storePlaygroundsTitle();
+		/*String owner = AvailablePlaygrounds.playgrounds.get(index-1).getOwnerEmail();
+		for (int i = 0 ; i < Account.Owners.size() ; i++) {
+			if (Account.Owners.get(i).getName().contentEquals(owner)) {
+				Account.Owners.get(i).myPlayground.setId(0);
+			}
+		}*/
 	}
 	
 	/**
 	 * This function to store playgrounds names into 'data' array
 	 */
 	private void storePlaygroundsTitle() {
-		for (int i = 0 ; i < playground.size() ; i++) {
-			data[i] = String.valueOf(i+1) + ") " + playground.get(i).getName();
+		for (int i = 0 ; i < AvailablePlaygrounds.playgrounds.size() ; i++) {
+			data[i] = String.valueOf(i+1) + ") " + AvailablePlaygrounds.playgrounds.get(i).getName();
 		}
 	}
 	
@@ -132,6 +147,7 @@ public class Administrator extends User implements ActionListener {
 		label2.setFont (label2.getFont ().deriveFont (10f));
 		label2.setForeground(Color.WHITE);
 		
+		text.setText("");
 		text.setBounds(100, 375, 80, 30);
 		
 		list.setBackground(Color.WHITE);
@@ -159,7 +175,7 @@ public class Administrator extends User implements ActionListener {
 		panel3.setBackground(Color.DARK_GRAY);
 		panel3.setLayout(null);
 		
-		label.setText(playground.get(index-1).getName());
+		label.setText(AvailablePlaygrounds.playgrounds.get(index-1).getName());
 		label.setBounds(10, 50, 250, 50);
 		
 		back2.setBounds(5, 5, 50, 30);
@@ -171,27 +187,27 @@ public class Administrator extends User implements ActionListener {
 		button3.setForeground(Color.DARK_GRAY);
 		button3.setBounds(200, 375, 80, 30);
 		
-		label3.setText("Location: " + playground.get(index-1).getLocation());
+		label3.setText("Location: " + AvailablePlaygrounds.playgrounds.get(index-1).getLocation());
 		label3.setBounds(40, 110, 250, 20);
-		label3.setFont (label3.getFont ().deriveFont (11f));
+		label3.setFont (label3.getFont ().deriveFont (12f));
 		label3.setForeground(Color.WHITE);
 		
-		label4.setText("Size: " + String.valueOf(playground.get(index-1).getSize()));
+		label4.setText("Size: " + String.valueOf(AvailablePlaygrounds.playgrounds.get(index-1).getSize()));
 		label4.setBounds(40, 150, 250, 20);
-		label4.setFont (label4.getFont ().deriveFont (11f));
+		label4.setFont (label4.getFont ().deriveFont (12f));
 		label4.setForeground(Color.WHITE);
 		
-		label5.setText("Description: " + playground.get(index-1).getDescription());
+		label5.setText("Description: " + AvailablePlaygrounds.playgrounds.get(index-1).getDescription());
 		label5.setBounds(40, 190, 250, 20);
-		label5.setFont (label5.getFont ().deriveFont (11f));
+		label5.setFont (label5.getFont ().deriveFont (12f));
 		label5.setForeground(Color.WHITE);
 		
-		label6.setText("Price per hour: " + String.valueOf(playground.get(index-1).getPricePerHour()));
+		label6.setText("Price per hour: " + String.valueOf(AvailablePlaygrounds.playgrounds.get(index-1).getPricePerHour()));
 		label6.setBounds(40, 230, 250, 20);
-		label6.setFont (label6.getFont ().deriveFont (11f));
+		label6.setFont (label6.getFont ().deriveFont (12f));
 		label6.setForeground(Color.WHITE);
 		
-		label7.setText("Cancellation period: " + String.valueOf(playground.get(index-1).getCancellationPeriod()));
+		label7.setText("Cancellation period: " + String.valueOf(AvailablePlaygrounds.playgrounds.get(index-1).getCancellationPeriod()));
 		label7.setBounds(40, 270, 250, 20);
 		label7.setFont (label7.getFont ().deriveFont (12f));
 		label7.setForeground(Color.WHITE);
@@ -222,7 +238,9 @@ public class Administrator extends User implements ActionListener {
 		if (e.getSource() == button2) {
 			String str = text.getText();
 			int i = Integer.parseInt(str);
-			viewPlayground(i);
+			if (i>0 && i<=AvailablePlaygrounds.playgrounds.size()) {
+				viewPlayground(i);
+			}
 		}
 		if (e.getSource() == button3) {
 			String str = text.getText();
@@ -235,6 +253,38 @@ public class Administrator extends User implements ActionListener {
 		else if (e.getSource() == back2) {
 			viewAllPlaygrounds();
 		}
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == logout) {
+			//login()
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 }
