@@ -3,14 +3,34 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 public class Playground {
-    private String name, location, description,ownerEmail;
+    private String name, location, description;
     private double size, pricePerHour;
-    private int cancellationPeriod, id;
-    ArrayList<TimeSlot> timeSlot = new ArrayList<>();
+    private int cancellationPeriod;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    private int id;
+    private ArrayList<TimeSlot> timeSlot = new ArrayList<>();
     public boolean Available[];
+    private PlaygroundOwner playgroundOwner;
+
+    public void setPlaygroundOwner(PlaygroundOwner playgroundOwner) {
+        this.playgroundOwner = playgroundOwner;
+    }
+
+    public PlaygroundOwner getPlaygroundOwner() {
+        return playgroundOwner;
+    }
 
     public Playground() {
-        for(int i=0;i<timeSlot.size();i++) Available[i] = true;
+        Available = new boolean[50];
+        for(int i=0;i<50;i++) Available[i] = true;
     }
 
     public String getName() {
@@ -73,21 +93,5 @@ public class Playground {
     public int timeSlotSize(){
         return timeSlot.size();
     }
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getOwnerEmail() {
-		return ownerEmail;
-	}
-
-	public void setOwnerEmail(String ownerEmail) {
-		this.ownerEmail = ownerEmail;
-	}
 
 }
