@@ -46,7 +46,11 @@ public class GUI extends JFrame implements MouseListener{
     private String notification;
     private String tmpName="",tmpEmail="",tmpPassword="",tmpLocation="",tmpPhone="",tmpID="";
 
-    JFrame frame = new JFrame();
+    JFrame frame;
+    JFrame frame2;
+    JFrame frame3;
+    JFrame frame4;
+    JFrame frame5;
     JPanel ownerHome = new JPanel();
     JPanel addUpdatePanel = new JPanel();
     JPanel slotsPanel = new JPanel();
@@ -91,6 +95,7 @@ public class GUI extends JFrame implements MouseListener{
      * This function builds the welcome page of the playground owner
      */
     private void ownerOptions() {
+    	frame = new JFrame();
         ownerHome.setVisible(true);
         addUpdatePanel.setVisible(false);
         slotsPanel.setVisible(false);
@@ -252,6 +257,14 @@ public class GUI extends JFrame implements MouseListener{
      * To build the window of the add playground button and update playground button.
      */
     private void formDetails() {
+    	frame2 = new JFrame();
+    	frame2.setTitle("GoFo");
+        frame2.setSize(300, 450);
+        frame2.setVisible(true);
+        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame2.setResizable(false);
+        frame2.setLocation(650, 200);
+        
         ownerHome.setVisible(false);
         slotsPanel.setVisible(false);
         addUpdatePanel.setVisible(true);
@@ -299,7 +312,7 @@ public class GUI extends JFrame implements MouseListener{
         priceText.setBounds(40, 250, 200, 20);
         cancellationText.setBounds(40, 290, 200, 20);
 
-        frame.add(addUpdatePanel);
+        frame2.add(addUpdatePanel);
         addUpdatePanel.add(ownerBack1);
         addUpdatePanel.add(header);
         addUpdatePanel.add(PgNameLabel);
@@ -320,6 +333,14 @@ public class GUI extends JFrame implements MouseListener{
     }
 
     public void addSlotsFrame() {
+    	frame3 = new JFrame();
+    	frame3.setTitle("GoFo");
+        frame3.setSize(300, 450);
+        frame3.setVisible(true);
+        frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame3.setResizable(false);
+        frame3.setLocation(650, 200);
+        
         addUpdatePanel.setVisible(false);
         slotsPanel.setVisible(true);
         slotsPanel.setBackground(new java.awt.Color(105,105,105));
@@ -357,7 +378,7 @@ public class GUI extends JFrame implements MouseListener{
 
         addSlots.setBounds(110, 300, 120, 20);
 
-        frame.add(slotsPanel);
+        frame3.add(slotsPanel);
         slotsPanel.add(header);
         slotsPanel.add(PgNameLabel);
         slotsPanel.add(locationLabel);
@@ -386,6 +407,14 @@ public class GUI extends JFrame implements MouseListener{
      * and it displays the bookings of the owner playground.
      */
     public void viewBookings() {
+    	frame4 = new JFrame();
+    	frame4.setTitle("GoFo");
+        frame4.setSize(300, 450);
+        frame4.setVisible(true);
+        frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame4.setResizable(false);
+        frame4.setLocation(650, 200);
+        
         ownerHome.setVisible(false);
         vBookingPanel.setVisible(true);
         vBookingPanel.setBackground(new java.awt.Color(105,105,105));
@@ -423,7 +452,7 @@ public class GUI extends JFrame implements MouseListener{
 
         ownerBack1Details();
 
-        frame.add(vBookingPanel);
+        frame4.add(vBookingPanel);
         vBookingPanel.add(ownerBack1);
         vBookingPanel.add(list);
         vBookingPanel.add(header);
@@ -445,6 +474,14 @@ public class GUI extends JFrame implements MouseListener{
      * and it displays the statue of the owner eWallet.
      */
     public void checkEwallet() {
+    	frame5 = new JFrame();
+    	frame5.setTitle("GoFo");
+        frame5.setSize(300, 450);
+        frame5.setVisible(true);
+        frame5.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame5.setResizable(false);
+        frame5.setLocation(650, 200);
+        
         ownerHome.setVisible(false);
         eWalletPanel.setVisible(true);
         eWalletPanel.setBackground(new java.awt.Color(105,105,105));
@@ -467,7 +504,7 @@ public class GUI extends JFrame implements MouseListener{
 
         ownerBack1Details();
 
-        frame.add(eWalletPanel);
+        frame5.add(eWalletPanel);
         eWalletPanel.add(header);
         eWalletPanel.add(lmoney);
         eWalletPanel.add(lid);
@@ -486,7 +523,7 @@ public class GUI extends JFrame implements MouseListener{
     }
 
 
-    public void mail(String to,String code,String name){
+    /*public void mail(String to,String code,String name){
         // Recipient's email ID needs to be mentioned.
         String from="rahma.y9079@gmail.com";
 
@@ -540,7 +577,7 @@ public class GUI extends JFrame implements MouseListener{
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
-    }
+    }*/
 
 
     private boolean isValid(String email)
@@ -972,9 +1009,6 @@ public class GUI extends JFrame implements MouseListener{
     }
    /* public void PlayerOptionOne(){
         timeSlot = new TimeSlot();
-
-
-
         jFrameShowPlayGround = new JFrame();
         jFrameShowPlayGround.setResizable(false);
         jFrameShowPlayGround.setVisible(true);
@@ -983,51 +1017,36 @@ public class GUI extends JFrame implements MouseListener{
         jFrameShowPlayGround.setSize(500,600);
         jFrameShowPlayGround.setLocation(500,100);
         jFrameShowPlayGround.getContentPane().setBackground(new java.awt.Color(105,105,105));
-
         selectTimeIntervalLabel = new JLabel("Specify time interval that suits you",SwingConstants.CENTER);
         selectTimeIntervalLabel.setBounds(90,0,300,50);
         selectTimeIntervalLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         selectTimeIntervalLabel.setForeground(Color.white);
-
-
         String days[] = {"All","Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"};
         DaysList = new JComboBox(days);
         DaysList.setSelectedItem(0);
         DaysList.setBounds(42,70,100,20);
         DaysList.setBackground(new java.awt.Color(142, 138, 138));
-
-
         String time[]={"All","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"};
         startTimeList = new JComboBox(time);
         startTimeList.setSelectedItem(0);
         startTimeList.setBounds(142,70,100,20);
         startTimeList.setBackground(new java.awt.Color(142, 138, 138));
-
         endTimeList = new JComboBox(time);
         endTimeList.setSelectedItem(0);
         endTimeList.setBounds(242,70,100,20);
         endTimeList.setBackground(new java.awt.Color(142, 138, 138));
-
-
-
         showPlaygroundsButton = new JButton("Show");
         showPlaygroundsButton.setBackground(new java.awt.Color( 142, 138, 138));
         showPlaygroundsButton.setForeground(Color.white);
         showPlaygroundsButton.setBounds(362,70,80,20);
         showPlaygroundsButton.setFont(new Font("Serif", Font.ROMAN_BASELINE, 13));
         showPlaygroundsButton.addActionListener(obj);
-
-
-
-
         jFrameShowPlayGround.add(startTimeList);jFrameShowPlayGround.add(endTimeList);jFrameShowPlayGround.add(DaysList);
         jFrameShowPlayGround.add(selectTimeIntervalLabel);jFrameShowPlayGround.add(showPlaygroundsButton);
     }*/
 
 
     /*public void PlayerOptionTwo(){
-
-
         jFrame1 = new JFrame();
         jFrame1.setTitle("");
         jFrame1.setResizable(false);
@@ -1037,18 +1056,14 @@ public class GUI extends JFrame implements MouseListener{
         jFrame1.setSize(350,450);
         jFrame1.setLocation(400,100);
         jFrame1.getContentPane().setBackground(new java.awt.Color(105,105,105));
-
-
         class MyCellRenderer extends DefaultListCellRenderer {
             public static final String HTML_1 = "<html><body style='width: ";
             public static final String HTML_2 = "px'>";
             public static final String HTML_3 = "</html>";
             private int width;
-
             public MyCellRenderer(int width) {
                 this.width = width;
             }
-
             @Override
             public Component getListCellRendererComponent(JList list, Object value,
                                                           int index, boolean isSelected, boolean cellHasFocus) {
@@ -1057,7 +1072,6 @@ public class GUI extends JFrame implements MouseListener{
                 return super.getListCellRendererComponent(list, text, index, isSelected,
                         cellHasFocus);
             }
-
         }
         list2 = new JList(currentPlayer.bookingHistory);
         list2.setBackground(new java.awt.Color(142, 138, 138));
@@ -1066,16 +1080,11 @@ public class GUI extends JFrame implements MouseListener{
         MyCellRenderer cellRenderer = new MyCellRenderer(200);
         list2.setCellRenderer(cellRenderer);
         scrollPane2.setBounds(5,10,325,350);
-
-
-
         returnToOptions = new JLabel("Back to options");
         returnToOptions.setBounds(220,380,100,20);
         returnToOptions.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
         returnToOptions.setForeground(Color.white);
         returnToOptions.addMouseListener(this);
-
-
         jFrame1.add(scrollPane2);
         jFrame1.add(returnToOptions);
     }*/
@@ -1090,14 +1099,10 @@ public class GUI extends JFrame implements MouseListener{
         jFrame.setSize(350,350);
         jFrame.setLocation(500,100);
         jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
-
-
         enterPlayerEmailLabel = new JLabel("Enter member email:",SwingConstants.LEFT);
         enterPlayerEmailLabel.setBounds(5,10,345,35);
         enterPlayerEmailLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         enterPlayerEmailLabel.setForeground(Color.white);
-
-
         playerEmailTF = new JTextField();
         playerEmailTF.setBounds(5,70,325,35);
         playerEmailTF.setBackground(new Color(128,128,128));
@@ -1105,30 +1110,23 @@ public class GUI extends JFrame implements MouseListener{
         playerEmailTF.setForeground(Color.white);
         playerEmailTF.setFont(new Font("Helvetica Neue", Font.PLAIN, 17));
         playerEmailTF.addMouseListener(this);
-
         addButton = new JButton("Add");
         addButton.setBounds(125,140,80,45);
         addButton.setForeground(Color.white);
         addButton.setBackground(new Color(255,134,0));
         addButton.setFont(new Font(Font.DIALOG, Font.BOLD,13));
         addButton.addActionListener(obj);
-
         teamFormationMsgLabel = new JLabel("",SwingConstants.CENTER);
         teamFormationMsgLabel.setBounds(90,210,150,35);
         teamFormationMsgLabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
         teamFormationMsgLabel.setForeground(new Color(255,134,0));
-
         returnToOptions3 = new JLabel("Back to options");
         returnToOptions3.setBounds(200,270,100,20);
         returnToOptions3.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
         returnToOptions3.setForeground(Color.white);
         returnToOptions3.addMouseListener(this);
-
-
         jFrame.add(enterPlayerEmailLabel);jFrame.add(playerEmailTF);jFrame.add(addButton);jFrame.add(teamFormationMsgLabel);
         jFrame.add(returnToOptions3);
-
-
     }*/
 
     /*public void PlayerOptionFour(){
@@ -1141,10 +1139,6 @@ public class GUI extends JFrame implements MouseListener{
         jFrame.setSize(300,300);
         jFrame.setLocation(400,100);
         jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
-
-
-
-
         notification = "lsdkjlkjlsdjl\n kjhsdjkhdjkhdkjhkjhd\n dshjhjhfgjhdgf\n sduytuyetututeut\nvnxvcn\n";
         NotificationLabel = new JLabel("<html>" + notification.replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>") + "</html>");
         NotificationLabel.setBounds(10,10,265,240);
@@ -1471,4 +1465,3 @@ public class GUI extends JFrame implements MouseListener{
     }
 
 }
-
