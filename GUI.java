@@ -6,15 +6,12 @@ package GOFO2;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.management.Notification;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.Properties;
-import java.util.Vector;
 import java.util.regex.Pattern;
 import javax.swing.Timer;
 
@@ -23,27 +20,31 @@ import static GOFO2.Main.currentPlayer;
 
 
 public class GUI extends JFrame implements MouseListener{
-    private JFrame jFrameShowPlayGround;
+    private JCheckBox checkBox;
+    private JFrame jFrameShowPlayGround, jFrame1;
     private Border border = BorderFactory.createLineBorder(Color.white, 1);
     private Border orangeBorder = BorderFactory.createLineBorder(new Color(255,134,0),2);
-    private JTextField UserEmailTF,registerNameTF,registerEmailTF,registerPhoneTF,registerLocationTF,codeTF,registerIDTF;
+    private JTextField UserEmailTF,registerNameTF,registerEmailTF,registerPhoneTF,registerLocationTF,codeTF,registerIDTF,playerEmailTF;
     private JPasswordField UserPF,registerPF;
-    private JLabel emailLabel,PasswordLabel,bookingNameLabel,bookingLocationLabel,bookingStTimeLabel,bookingEndTimeLabel,bookingDayLabel,bookingPriceLabel;
+    private JLabel NotificationLabel;
+    private JLabel emailLabel,PasswordLabel, returnToOptions3,returnToOptions, calcellationPeriodLabel,enterPlayerEmailLabel,teamFormationMsgLabel;
     private JLabel NewUserLabel,SignUpLabel,registerNameLabel,registerEmailLabel,registerPasswordLabel,registerPhoneLabel;
     private JLabel registerLocationLabel, errorInSignInLabel,errorInSignUpLabel,incorrectCodeLabel,verificationLabel,eWalletLabel;
-    private JLabel m,h,s,welcomePlayer,Logout,selectTimeIntervalLabel;
+    private JLabel minutesLabel,h, secondsLabel,welcomePlayer,Logout,selectTimeIntervalLabel,returnToOptions2;
     private JLabel playerOptionsLabelOne, playerOptionsLabelTwo, playerOptionsLabelthree, playerOptionsLabelFour;
-    private JButton LoginButton, SignUPButton,verificationButton,StartButton,Back,showPlaygroundsButton,confirmBooking,selectButton;
+    private JButton LoginButton, SignUPButton,CancelButton,verificationButton,addButton,showPlaygroundsButton,confirmBooking;
     private Image img = Toolkit.getDefaultToolkit().getImage("C:\\Users\\Rahma Yasser\\Desktop\\logotrans.png");
     private JRadioButton r1,r2;
     private ButtonGroup buttonGroup;
     private JComboBox DaysList,startTimeList,endTimeList;
     private JScrollPane scrollPane;
     private JList list1,list2;
-    static int miliseconds=0,seconds=3,minutes=0,hours=0,ItemIndex=0,BookingIndex=0;
+    static int ItemIndex=0,BookingIndex=0;
     static boolean state;
-    Timer timer;
     TimeSlot timeSlot;
+    public boolean checked=false;
+    String notification;
+
 
     ActionInterface obj = new ActionInterface();
 
@@ -136,9 +137,26 @@ public class GUI extends JFrame implements MouseListener{
             registerPage();
             setVisible(false);
         }
-        if(e.getSource()==playerOptionsLabelOne){
-            PlayerOptionOne();
+        if(e.getSource() == playerOptionsLabelOne) PlayerOptionOne();
+        if(e.getSource() == playerOptionsLabelTwo) PlayerOptionTwo();
+        if(e.getSource() == playerOptionsLabelthree);PlayerOptionThree();
+        if(e.getSource() == playerOptionsLabelFour) PlayerOptionFour();
+        if(e.getSource() == returnToOptions) {
+            jFrame1.setVisible(false);
+            playerOptions();
         }
+        if(e.getSource() == returnToOptions2){
+            playerOptions();
+        }
+        if(e.getSource() == returnToOptions3) {
+            playerOptions();
+        }
+        if(e.getSource() == Logout){
+            currentPlayer = null;
+            currentOwner = null;
+            LoginPage();
+        }
+
 
     }
 
@@ -166,9 +184,7 @@ public class GUI extends JFrame implements MouseListener{
         if(e.getSource() == registerLocationTF)registerLocationTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         if(e.getSource() == UserPF)UserPF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         if(e.getSource() == registerPF)registerPF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        if(e.getSource() == playerOptionsLabelOne) {
 
-        }
 
 
     }
@@ -200,6 +216,7 @@ public class GUI extends JFrame implements MouseListener{
         playerOptionsLabelOne.setBounds(5,85,375,70);
         playerOptionsLabelOne.setBorder(orangeBorder);
         playerOptionsLabelOne.setFont(new Font("Serif", Font.BOLD, 18));
+        playerOptionsLabelOne.addMouseListener(this);
 
 
         playerOptionsLabelTwo = new JLabel("Show your booking history",SwingConstants.CENTER);
@@ -208,7 +225,7 @@ public class GUI extends JFrame implements MouseListener{
         playerOptionsLabelTwo.setBounds(5,160,375,70);
         playerOptionsLabelTwo.setBorder(orangeBorder);
         playerOptionsLabelTwo.setFont(new Font("Serif", Font.BOLD, 18));
-
+        playerOptionsLabelTwo.addMouseListener(this);
 
         playerOptionsLabelthree = new JLabel("Make new team",SwingConstants.CENTER);
         playerOptionsLabelthree.setBackground(new java.awt.Color(105,105,105));
@@ -216,7 +233,7 @@ public class GUI extends JFrame implements MouseListener{
         playerOptionsLabelthree.setBounds(5,235,375,70);
         playerOptionsLabelthree.setBorder(orangeBorder);
         playerOptionsLabelthree.setFont(new Font("Serif", Font.BOLD, 18));
-
+        playerOptionsLabelthree.addMouseListener(this);
 
 
         playerOptionsLabelFour = new JLabel("Check your friends invitations",SwingConstants.CENTER);
@@ -225,64 +242,21 @@ public class GUI extends JFrame implements MouseListener{
         playerOptionsLabelFour.setBounds(5,310,375,70);
         playerOptionsLabelFour.setBorder(orangeBorder);
         playerOptionsLabelFour.setFont(new Font("Serif", Font.BOLD, 18));
+        playerOptionsLabelFour.addMouseListener(this);
+
 
         Logout = new JLabel("logout");
         Logout.setBackground(new java.awt.Color(105,105,105));
         Logout.setForeground(Color.white);
         Logout.setBounds(315,385,70,30);
         Logout.setFont(new Font("Serif", Font.ROMAN_BASELINE, 17));
-
+        Logout.addMouseListener(this);
 
 
         jFrame.add(welcomePlayer);jFrame.add(playerOptionsLabelOne);jFrame.add(playerOptionsLabelTwo);
         jFrame.add(playerOptionsLabelthree);jFrame.add(playerOptionsLabelFour);jFrame.add(Logout);
     }
-    public void Timer(){
-        //JFrame jFrame = new JFrame();
-        JFrame jFrame = new JFrame();
-        jFrame.setTitle("Timer");
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLayout(null);
-        jFrame.setSize(400,400);
-        jFrame.setLocation(500,100);
-        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
-        StartButton = new JButton("Start");
-        StartButton.setBounds(142,200,100,45);
-        StartButton.setForeground(Color.white);
-        StartButton.setBackground(new Color(255,134,0));
-        StartButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD,17));
-        StartButton.addActionListener(obj);
-
-        m = new JLabel("Minutes");
-        m.setBounds(10,30,30,30);
-        m.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        m.setForeground(Color.white);
-
-
-        h = new JLabel("Hours");
-        h.setBounds(50,30,30,35);
-        h.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        h.setForeground(Color.white);
-
-
-
-        s = new JLabel("sec");
-        s.setBounds(90,30,30,35);
-        s.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        s.setForeground(Color.white);
-
-        Back = new JButton("Back");
-        Back.setBounds(142,300,100,45);
-        Back.setForeground(Color.white);
-        Back.setBackground(new Color(255,134,0));
-        Back.setFont(new Font(Font.SANS_SERIF, Font.BOLD,17));
-        Back.addActionListener(obj);
-
-        jFrame.add(s); jFrame.add(m);jFrame.add(h);jFrame.add(StartButton);jFrame.add(Back);
-    }
     public void LoginPage(){
         //TODO show options
 
@@ -295,8 +269,6 @@ public class GUI extends JFrame implements MouseListener{
 
             }
         });
-
-
 
 
 
@@ -615,15 +587,15 @@ public class GUI extends JFrame implements MouseListener{
     public void PlayerOptionTwo(){
 
 
-        JFrame jFrame = new JFrame();
-        jFrame.setTitle("");
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLayout(null);
-        jFrame.setSize(500,500);
-        jFrame.setLocation(500,100);
-        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        jFrame1 = new JFrame();
+        jFrame1.setTitle("");
+        jFrame1.setResizable(false);
+        jFrame1.setVisible(true);
+        jFrame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame1.setLayout(null);
+        jFrame1.setSize(350,450);
+        jFrame1.setLocation(400,100);
+        jFrame1.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
 
         class MyCellRenderer extends DefaultListCellRenderer {
@@ -652,65 +624,165 @@ public class GUI extends JFrame implements MouseListener{
         scrollPane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         MyCellRenderer cellRenderer = new MyCellRenderer(200);
         list2.setCellRenderer(cellRenderer);
-        scrollPane2.setBounds(5,10,475,350);
+        scrollPane2.setBounds(5,10,325,350);
 
 
-        selectButton = new JButton("Select");
-        selectButton.setBackground(new java.awt.Color(255,134,0 ));
-        selectButton.setForeground(Color.white);
-        selectButton.setBounds(190,390,100,45);
-        selectButton.setFont(new Font("Serif", Font.ROMAN_BASELINE, 17));
-        selectButton.addActionListener(obj);
 
-        jFrame.add(scrollPane2);jFrame.add(selectButton);
+        returnToOptions = new JLabel("Back to options");
+        returnToOptions.setBounds(220,380,100,20);
+        returnToOptions.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
+        returnToOptions.setForeground(Color.white);
+        returnToOptions.addMouseListener(this);
+
+
+        jFrame1.add(scrollPane2);
+        jFrame1.add(returnToOptions);
     }
 
+    public void PlayerOptionThree(){
+        JFrame jFrame = new JFrame();
+        jFrame.setTitle("");
+        jFrame.setResizable(false);
+        jFrame.setVisible(true);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setLayout(null);
+        jFrame.setSize(350,350);
+        jFrame.setLocation(500,100);
+        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
-    public void showBookingInfo(Booking booking){
+
+        enterPlayerEmailLabel = new JLabel("Enter member email:",SwingConstants.LEFT);
+        enterPlayerEmailLabel.setBounds(5,10,345,35);
+        enterPlayerEmailLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+        enterPlayerEmailLabel.setForeground(Color.white);
+
+
+        playerEmailTF = new JTextField();
+        playerEmailTF.setBounds(5,70,325,35);
+        playerEmailTF.setBackground(new Color(128,128,128));
+        playerEmailTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        playerEmailTF.setForeground(Color.white);
+        playerEmailTF.setFont(new Font("Helvetica Neue", Font.PLAIN, 17));
+        playerEmailTF.addMouseListener(this);
+
+        addButton = new JButton("Add");
+        addButton.setBounds(125,140,80,45);
+        addButton.setForeground(Color.white);
+        addButton.setBackground(new Color(255,134,0));
+        addButton.setFont(new Font(Font.DIALOG, Font.BOLD,13));
+        addButton.addActionListener(obj);
+
+        teamFormationMsgLabel = new JLabel("",SwingConstants.CENTER);
+        teamFormationMsgLabel.setBounds(90,210,150,35);
+        teamFormationMsgLabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
+        teamFormationMsgLabel.setForeground(new Color(255,134,0));
+
+        returnToOptions3 = new JLabel("Back to options");
+        returnToOptions3.setBounds(200,270,100,20);
+        returnToOptions3.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
+        returnToOptions3.setForeground(Color.white);
+        returnToOptions3.addMouseListener(this);
+
+
+        jFrame.add(enterPlayerEmailLabel);jFrame.add(playerEmailTF);jFrame.add(addButton);jFrame.add(teamFormationMsgLabel);
+        jFrame.add(returnToOptions3);
+
+
+    }
+
+    public void PlayerOptionFour(){
+        JFrame jFrame = new JFrame();
+        jFrame.setTitle("");
+        jFrame.setResizable(false);
+        jFrame.setVisible(true);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setLayout(null);
+        jFrame.setSize(300,300);
+        jFrame.setLocation(400,100);
+        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
+
+
+
+
+        notification = "lsdkjlkjlsdjl\n kjhsdjkhdjkhdkjhkjhd\n dshjhjhfgjhdgf\n sduytuyetututeut\nvnxvcn\n";
+        NotificationLabel = new JLabel("<html>" + notification.replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>") + "</html>");
+        NotificationLabel.setBounds(10,10,265,240);
+        NotificationLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+        NotificationLabel.setForeground(Color.white);
+        NotificationLabel.setBorder(border);
+        jFrame.add(NotificationLabel);
+    }
+    public void showBookingInfo(Booking booking,PlaygroundOwner playgroundOwner){
         JFrame jFrame = new JFrame();
         jFrame.setResizable(false);
         jFrame.setVisible(true);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLayout(null);
-        jFrame.setSize(500,600);
+        jFrame.setSize(300,330);
         jFrame.setLocation(500,100);
         jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
-        bookingNameLabel = new JLabel("Playground name:"+currentPlayer.bookingHistory.get(BookingIndex).item.name ,SwingConstants.LEFT);
-        bookingNameLabel.setBounds(90,0,300,50);
-         bookingNameLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        bookingNameLabel.setForeground(Color.white);
+
+        calcellationPeriodLabel = new JLabel("Cancellation period ends in",SwingConstants.CENTER);
+        calcellationPeriodLabel.setBackground(new java.awt.Color(105,105,105));
+        calcellationPeriodLabel.setForeground(Color.white);
+        calcellationPeriodLabel.setBounds(5,10,270,70);
+        calcellationPeriodLabel.setFont(new Font("Serif", Font.BOLD, 20));
 
 
-        bookingLocationLabel = new JLabel("Playground location:"+currentPlayer.bookingHistory.get(BookingIndex).item.location ,SwingConstants.LEFT);
-        bookingLocationLabel.setBounds(90,0,300,50);
-        bookingLocationLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        bookingLocationLabel.setForeground(Color.white);
+
+        secondsLabel = new JLabel();
+        secondsLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        secondsLabel.setBounds(150,90,80,70);
+        secondsLabel.setForeground(Color.WHITE);
 
 
-        bookingDayLabel = new JLabel("Day: "+currentPlayer.bookingHistory.get(BookingIndex).item.timeSlot.getDay());
-        bookingDayLabel.setBounds(90,0,300,50);
-        bookingDayLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        bookingDayLabel.setForeground(Color.white);
-
-        bookingStTimeLabel = new JLabel("Start time: "+String.valueOf(currentPlayer.bookingHistory.get(BookingIndex).item.timeSlot.getStartTime()));
-        bookingStTimeLabel.setBounds(90,0,300,50);
-        bookingStTimeLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        bookingStTimeLabel.setForeground(Color.white);
+        minutesLabel = new JLabel();
+        minutesLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        minutesLabel.setBounds(50,90,80,70);
+        minutesLabel.setForeground(Color.WHITE);
 
 
-        bookingStTimeLabel = new JLabel("End time: "+String.valueOf(currentPlayer.bookingHistory.get(BookingIndex).item.timeSlot.getEndTime()));
-        bookingStTimeLabel.setBounds(90,0,300,50);
-        bookingStTimeLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        bookingStTimeLabel.setForeground(Color.white);
+
+        booking.timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                booking.seconds--;
+                secondsLabel.setText("seconds "+booking.seconds);
+                minutesLabel.setText("minutes "+booking.item.cancellationPeriod);
+                if(booking.seconds == 0 ){
+                    booking.seconds=60;
+                    booking.item.cancellationPeriod--;
+                }
+                if(booking.item.cancellationPeriod<0){
+                    booking.seconds=0;booking.item.cancellationPeriod=0;
+                    double money = (playgroundOwner.getUserEwallet().getCurrentMoney()+booking.bookingWallet.getCurrentMoney());
+                    playgroundOwner.getUserEwallet().setCurrentMoney(money); ;
+                    booking.timer.stop();
+                }
+
+            }
+        });
+        booking.timer.start();
 
 
-        bookingPriceLabel = new JLabel("Price: "+String.valueOf(currentPlayer.bookingHistory.get(BookingIndex).Price));
-        bookingPriceLabel.setBounds(90,0,300,50);
-        bookingPriceLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        bookingPriceLabel.setForeground(Color.white);
+        CancelButton = new JButton("Cancel booking");
+        CancelButton.setBounds(65,180,150,35);
+        CancelButton.setForeground(Color.white);
+        CancelButton.setBackground(new Color(255,134,0));
+        CancelButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD,14));
+        CancelButton.addActionListener(obj);
 
 
+        returnToOptions2 = new JLabel("Back to options");
+        returnToOptions2.setBounds(180,240,100,20);
+        returnToOptions2.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
+        returnToOptions2.setForeground(Color.white);
+        returnToOptions2.addMouseListener(this);
+
+
+        jFrame.add(secondsLabel);jFrame.add(minutesLabel);jFrame.add(CancelButton);jFrame.add(calcellationPeriodLabel);
+        jFrame.add(returnToOptions2);
 
     }
 
@@ -718,6 +790,20 @@ public class GUI extends JFrame implements MouseListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == addButton){
+                String mail = playerEmailTF.getText().toString();
+                boolean found=false;
+                for(Player player:Account.Players){
+                    if(player.getEmail().equals(mail)){
+                        found=true;
+                        currentPlayer.team = new Team();
+                        currentPlayer.team.teamList.add(player);
+                        teamFormationMsgLabel.setText("Added successfully");
+                        break;
+                    }
+                }
+                if(!found) teamFormationMsgLabel.setText("Player not found");
+            }
             if(e.getSource()==confirmBooking){
                 ItemIndex = list1.getSelectedIndex();
                 System.out.println(ItemIndex);
@@ -726,11 +812,25 @@ public class GUI extends JFrame implements MouseListener{
                 if(currentPlayer.getUserEwallet().getCurrentMoney() >=booking.Price){
                     booking.item=AvailablePlaygrounds.items.get(ItemIndex);
                     currentPlayer.bookingHistory.add(booking);
+                    PlaygroundOwner playgroundOwner = new PlaygroundOwner();
+                    for(int i=0;i<Account.Owners.size();i++){
+                        if(booking.item.playgroundOwner.equals(Account.Owners.get(i))){
+                            Account.Owners.get(i).bookingHistory.add(booking);
+                            playgroundOwner = Account.Owners.get(i);
+                            break;
+                        }
+                    }
+                    showBookingInfo(booking,playgroundOwner);
                     currentPlayer.getUserEwallet().setCurrentMoney(currentPlayer.getUserEwallet().getCurrentMoney()-booking.Price);
                     booking.bookingWallet.setCurrentMoney(booking.Price);
                     AvailablePlaygrounds.playgrounds.get(booking.item.i).Available[booking.item.j] = false;
-
                 }
+
+                for(Player player:currentPlayer.team.teamList){
+                    notification = currentPlayer.getName()+"Invites you to play\n playground info: "+booking.item.toString();
+                    player.setNotification(notification);
+                }
+
             }
             if(e.getSource() == LoginButton) {
                 String email = UserEmailTF.getText().toString();
@@ -739,7 +839,6 @@ public class GUI extends JFrame implements MouseListener{
                 Player player=new Player();
                 PlaygroundOwner playgroundOwner=new PlaygroundOwner();
                 boolean foundInPlayer=false,foundInOwner=false;
-                //TODO test after completing registration code
                 for( int i=0;i<Account.Players.size();i++){
                     player = Account.Players.get(i);
                     if(player.getEmail().equals(email) && player.getPassword().equals(password))foundInPlayer=true;break;
@@ -801,26 +900,6 @@ public class GUI extends JFrame implements MouseListener{
                 }
 
             }
-            if(e.getSource() == StartButton){
-                timer = new Timer(1000, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        seconds--;
-                        s.setText(""+seconds);
-                        m.setText(""+minutes);
-                        if(seconds == 0 ){
-                            seconds=60;
-                            minutes--;
-                        }
-                        if(minutes<0){
-                            seconds=0;minutes=0;
-                            timer.stop();
-                        }
-
-                    }
-                });
-                timer.start();
-            }
 
             if(e.getSource()==showPlaygroundsButton){
                 String day = (String)DaysList.getSelectedItem();
@@ -865,6 +944,16 @@ public class GUI extends JFrame implements MouseListener{
                 list1.setCellRenderer(cellRenderer);
                 scrollPane.setBounds(5,110,475,350);
 
+                checkBox= new JCheckBox("Invite your team");
+                checkBox.setBounds(340,500,120,20);
+                checkBox.setBackground(new java.awt.Color(105,105,105));
+                jFrameShowPlayGround.add(checkBox);
+                checkBox.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if(e.getStateChange()==1) checked = true;
+                    }
+                });
 
                 confirmBooking = new JButton("Confirm");
                 confirmBooking.setBackground(new java.awt.Color(255,134,0 ));
@@ -875,12 +964,18 @@ public class GUI extends JFrame implements MouseListener{
 
                 jFrameShowPlayGround.add(scrollPane);jFrameShowPlayGround.add(confirmBooking);
             }
-            if(e.getSource()==selectButton){
-                BookingIndex = list2.getSelectedIndex();
-                showBookingInfo(currentPlayer.bookingHistory.get(BookingIndex));
+            if(e.getSource()==CancelButton){
+                PlaygroundOwner playgroundOwner = new PlaygroundOwner();
+                playgroundOwner = AvailablePlaygrounds.items.get(ItemIndex).playgroundOwner;
+                currentPlayer.bookingHistory.remove(currentPlayer.bookingHistory.size()-1);
+                System.out.println(playgroundOwner.bookingHistory.size());
+                playgroundOwner.bookingHistory.remove(playgroundOwner.bookingHistory.size()-1);
+                Item item = AvailablePlaygrounds.items.get(ItemIndex);
+                AvailablePlaygrounds.playgrounds.get(item.i).Available[item.j] = true;
+                playerOptions();
             }
         }
-
     }
+
 }
 
