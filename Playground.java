@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Playground {
     private String name, location, description,ownerEmail;
     private double size, pricePerHour;
-    private int cancellationPeriod;
-    private ArrayList<TimeSlot> timeSlot = new ArrayList<>();
+    private int cancellationPeriod, id;
+    ArrayList<TimeSlot> timeSlot = new ArrayList<>();
     public boolean Available[];
 
     public Playground() {
@@ -73,5 +73,21 @@ public class Playground {
     public int timeSlotSize(){
         return timeSlot.size();
     }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getOwnerEmail() {
+		return ownerEmail;
+	}
+
+	public void setOwnerEmail(String ownerEmail) {
+		this.ownerEmail = ownerEmail;
+	}
 
 }
