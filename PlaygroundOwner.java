@@ -15,43 +15,43 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	Playground myPlayground = new Playground();
 	public Vector<Booking> ownerBookingHistory = new Vector();
 	String request = "error";
-	String[] slots = new String[20];
+	Vector<String> slots = new Vector();
 	
 	JFrame frame = new JFrame();
-	JPanel panel = new JPanel();
-	JPanel panel2 = new JPanel();
-	JPanel panel3 = new JPanel();
-	JPanel panel4 = new JPanel();
-	JPanel panel5 = new JPanel();
-	JLabel label = new JLabel();
-	JLabel label2 = new JLabel("Name");
-	JLabel label3 = new JLabel("Location");
-	JLabel label4 = new JLabel("Size");
-	JLabel label5 = new JLabel("Description");
-	JLabel label6 = new JLabel("Price Per Hour");
-	JLabel label7 = new JLabel("Cancellation Period");
+	JPanel ownerHome = new JPanel();
+	JPanel addUpdatePanel = new JPanel();
+	JPanel slotsPanel = new JPanel();
+	JPanel vBookingPanel = new JPanel();
+	JPanel eWalletPanel = new JPanel();
+	JLabel header = new JLabel();
+	JLabel PgNameLabel = new JLabel("Name");
+	JLabel locationLabel = new JLabel("Location");
+	JLabel sizeLabel = new JLabel("Size");
+	JLabel descriptionLabel = new JLabel("Description");
+	JLabel priceLabel = new JLabel("Price Per Hour");
+	JLabel cancellationLabel = new JLabel("Cancellation Period");
 	JLabel addSlots = new JLabel("Add Slots");
 	JLabel viewSlots = new JLabel("View Slots");
 	JLabel logout = new JLabel("logout");
 	JLabel lmoney = new JLabel();
 	JLabel lid = new JLabel();
-	JTextField text = new JTextField();
-	JTextField text2 = new JTextField();
-	JTextField text3 = new JTextField();
-	JTextField text4 = new JTextField();
-	JTextField text5 = new JTextField();
-	JTextField text6 = new JTextField();
+	JTextField nameText = new JTextField();
+	JTextField locationText = new JTextField();
+	JTextField sizeText = new JTextField();
+	JTextField descriptionText = new JTextField();
+	JTextField priceText = new JTextField();
+	JTextField cancellationText = new JTextField();
 	JTextField day = new JTextField();
 	JTextField from = new JTextField();
 	JTextField to = new JTextField();
-	JButton button = new JButton("Add Playground");
-	JButton button2 = new JButton("Update Playground");
-	JButton button3 = new JButton("View Bookings");
-	JButton button4 = new JButton("Status & eWallet");
-	JButton button5 = new JButton("Add");
-	JButton button6 = new JButton("Update");
+	JButton addPgButton = new JButton("Add Playground");
+	JButton updatePgButton = new JButton("Update Playground");
+	JButton vBookingButton = new JButton("View Bookings");
+	JButton eWalletButton = new JButton("Status & eWallet");
+	JButton addButton = new JButton("Add");
+	JButton updateButton = new JButton("Update");
 	JButton done = new JButton("Done");
-	JButton back1 = new JButton("<<");
+	JButton ownerBack1 = new JButton("<<");
 	
 	PlaygroundOwner(){
 		displayWelcome();
@@ -61,11 +61,11 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 * This function builds the welcome page of the playground owner
 	 */
 	private void displayWelcome() {
-		panel.setVisible(true);
-		panel2.setVisible(false);
-		panel3.setVisible(false);
-		panel4.setVisible(false);
-		panel5.setVisible(false);
+		ownerHome.setVisible(true);
+		addUpdatePanel.setVisible(false);
+		slotsPanel.setVisible(false);
+		vBookingPanel.setVisible(false);
+		eWalletPanel.setVisible(false);
 		
 		frame.setTitle("GoFo");
 		frame.setSize(300, 450);
@@ -74,49 +74,49 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		frame.setResizable(false);
 		frame.setLocation(650, 200);
 		
-		button.setBackground(Color.ORANGE);
-		button.setForeground(Color.DARK_GRAY);
-		button.setBounds(20, 200, 110, 50);
-		button.setFont (label.getFont ().deriveFont (9f));
+		addPgButton.setBackground(new Color(255,134,0));
+		addPgButton.setForeground(Color.white);
+		addPgButton.setBounds(20, 200, 110, 50);
+		addPgButton.setFont (header.getFont ().deriveFont (9f));
 		
-		button2.setBackground(Color.ORANGE);
-		button2.setForeground(Color.DARK_GRAY);
-		button2.setBounds(160, 200, 110, 50);
-		button2.setFont (label.getFont ().deriveFont (10f));
+		updatePgButton.setBackground(new Color(255,134,0));
+		updatePgButton.setForeground(Color.white);
+		updatePgButton.setBounds(160, 200, 110, 50);
+		updatePgButton.setFont (header.getFont ().deriveFont (8f));
 		
-		button3.setBackground(Color.ORANGE);
-		button3.setForeground(Color.DARK_GRAY);
-		button3.setBounds(20, 270, 110, 50);
-		button3.setFont (label.getFont ().deriveFont (9f));
+		vBookingButton.setBackground(new Color(255,134,0));
+		vBookingButton.setForeground(Color.white);
+		vBookingButton.setBounds(20, 270, 110, 50);
+		vBookingButton.setFont (header.getFont ().deriveFont (9f));
 		
-		button4.setBackground(Color.ORANGE);
-		button4.setForeground(Color.DARK_GRAY);
-		button4.setBounds(160, 270, 110, 50);
-		button4.setFont (label.getFont ().deriveFont (9f));
+		eWalletButton.setBackground(new Color(255,134,0));
+		eWalletButton.setForeground(Color.white);
+		eWalletButton.setBounds(160, 270, 110, 50);
+		eWalletButton.setFont (header.getFont ().deriveFont (9f));
 		
-		panel.setLayout(null);
-		panel.setBackground(Color.DARK_GRAY);
+		ownerHome.setLayout(null);
+		ownerHome.setBackground(new java.awt.Color(105,105,105));
 		
-		label.setForeground(Color.WHITE);
-		label.setText("WELCOME");
-		label.setFont (label.getFont ().deriveFont (23f));
-		label.setBounds(80, 50, 130, 50);
+		header.setForeground(Color.WHITE);
+		header.setText("WELCOME");
+		header.setFont (header.getFont ().deriveFont (23f));
+		header.setBounds(80, 50, 130, 50);
 		
 		logout.setForeground(Color.WHITE);
 		logout.setBounds(120, 340, 130, 50);
 		
-		frame.add(panel);
-		panel.add(button);
-		panel.add(button2);
-		panel.add(button3);
-		panel.add(button4);
-		panel.add(label);
-		panel.add(logout);
+		frame.add(ownerHome);
+		ownerHome.add(addPgButton);
+		ownerHome.add(updatePgButton);
+		ownerHome.add(vBookingButton);
+		ownerHome.add(eWalletButton);
+		ownerHome.add(header);
+		ownerHome.add(logout);
 		
-		button.addActionListener(this);
-		button2.addActionListener(this);
-		button3.addActionListener(this);
-		button4.addActionListener(this);
+		addPgButton.addActionListener(this);
+		updatePgButton.addActionListener(this);
+		vBookingButton.addActionListener(this);
+		eWalletButton.addActionListener(this);
 		logout.addMouseListener(this);
 	}
 	
@@ -128,19 +128,19 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		
 		formDetails();
 		
-		label.setText("Add Playground");
-		label.setBounds(50, 30, 180, 50);
+		header.setText("Add Playground");
+		header.setBounds(50, 30, 180, 50);
 		
-		button5.setBackground(Color.ORANGE);
-		button5.setForeground(Color.DARK_GRAY);
-		button5.setBounds(100, 375, 80, 30);
-		button5.setVisible(true);
-		button6.setVisible(false);
+		addButton.setBackground(new Color(255,134,0));
+		addButton.setForeground(Color.WHITE);
+		addButton.setBounds(100, 375, 80, 30);
+		addButton.setVisible(true);
+		updateButton.setVisible(false);
 		
-		back1Details();
+		ownerBack1Details();
 		
-		panel2.add(button5);
-		button5.addActionListener(this);
+		addUpdatePanel.add(addButton);
+		addButton.addActionListener(this);
 	}
 	
 	/**
@@ -149,16 +149,15 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 * If not, the request will be error because of uncompleted information.
 	 */
 	public void getPlaygroundData() {
-		if (!text.getText().contentEquals("") && !text2.getText().contentEquals("") && !text3.getText().contentEquals("")
-			&& !text4.getText().contentEquals("") && !text5.getText().contentEquals("") && !text6.getText().contentEquals("")) {
+		if (!nameText.getText().contentEquals("") && !locationText.getText().contentEquals("") && !sizeText.getText().contentEquals("")
+			&& !descriptionText.getText().contentEquals("") && !priceText.getText().contentEquals("") && !cancellationText.getText().contentEquals("")) {
 			
-			myPlayground.setName(text.getText());
-			myPlayground.setLocation(text2.getText());
-			myPlayground.setSize(Double.parseDouble(text3.getText()));
-			myPlayground.setDescription(text4.getText());
-			myPlayground.setPricePerHour(Double.parseDouble(text5.getText()));
-			myPlayground.setCancellationPeriod(Integer.parseInt(text6.getText()));
-			//ground.setSlots(text7.getText());
+			myPlayground.setName(nameText.getText());
+			myPlayground.setLocation(locationText.getText());
+			myPlayground.setSize(Double.parseDouble(sizeText.getText()));
+			myPlayground.setDescription(descriptionText.getText());
+			myPlayground.setPricePerHour(Double.parseDouble(priceText.getText()));
+			myPlayground.setCancellationPeriod(Integer.parseInt(cancellationText.getText()));
 			request = "ok";
 		}
 		else {
@@ -174,31 +173,31 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		
 		formDetails();
 		
-		label.setText("Update Playground");
-		label.setBounds(30, 25, 220, 50);
+		header.setText("Update Playground");
+		header.setBounds(30, 25, 220, 50);
 		
-		button6.setBackground(Color.ORANGE);
-		button6.setForeground(Color.DARK_GRAY);
-		button6.setBounds(100, 375, 80, 30);
-		button6.setVisible(true);
-		button5.setVisible(false);
+		updateButton.setBackground(new Color(255,134,0));
+		updateButton.setForeground(Color.WHITE);
+		updateButton.setBounds(100, 375, 80, 30);
+		updateButton.setVisible(true);
+		addButton.setVisible(false);
 		
-		back1Details();
+		ownerBack1Details();
 			
 		String str;
 		
-		text.setText(myPlayground.getName());
-		text2.setText(myPlayground.getLocation());
+		nameText.setText(myPlayground.getName());
+		locationText.setText(myPlayground.getLocation());
 		str = String.valueOf(myPlayground.getSize());
-		text3.setText(str);
-		text4.setText(myPlayground.getDescription());
+		sizeText.setText(str);
+		descriptionText.setText(myPlayground.getDescription());
 		str = String.valueOf(myPlayground.getPricePerHour());
-		text5.setText(str);
+		priceText.setText(str);
 		str = String.valueOf(myPlayground.getCancellationPeriod());
-		text6.setText(str);
+		cancellationText.setText(str);
 		
-		panel2.add(button6);
-		button6.addActionListener(this);
+		addUpdatePanel.add(updateButton);
+		updateButton.addActionListener(this);
 	}
 	
 	/**
@@ -221,99 +220,99 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 * To build the window of the add playground button and update playground button.
 	 */
 	private void formDetails() {
-		panel.setVisible(false);
-		panel3.setVisible(false);
-		panel2.setVisible(true);
-		panel2.setBackground(Color.DARK_GRAY);
-		panel2.setLayout(null);
+		ownerHome.setVisible(false);
+		slotsPanel.setVisible(false);
+		addUpdatePanel.setVisible(true);
+		addUpdatePanel.setBackground(new java.awt.Color(105,105,105));
+		addUpdatePanel.setLayout(null);
 		
-		label2.setText("Name");
-		label2.setBounds(40, 70, 80, 20);
-		label2.setFont (label2.getFont ().deriveFont (10f));
-		label2.setForeground(Color.WHITE);
+		PgNameLabel.setText("Name");
+		PgNameLabel.setBounds(40, 70, 80, 20);
+		PgNameLabel.setFont (PgNameLabel.getFont ().deriveFont (10f));
+		PgNameLabel.setForeground(Color.WHITE);
 		
-		label3.setText("Location");
-		label3.setBounds(40, 110, 80, 20);
-		label3.setFont (label3.getFont ().deriveFont (10f));
-		label3.setForeground(Color.WHITE);
+		locationLabel.setText("Location");
+		locationLabel.setBounds(40, 110, 80, 20);
+		locationLabel.setFont (locationLabel.getFont ().deriveFont (10f));
+		locationLabel.setForeground(Color.WHITE);
 		
-		label4.setText("Size");
-		label4.setBounds(40, 150, 80, 20);
-		label4.setFont (label4.getFont ().deriveFont (10f));
-		label4.setForeground(Color.WHITE);
+		sizeLabel.setText("Size");
+		sizeLabel.setBounds(40, 150, 80, 20);
+		sizeLabel.setFont (sizeLabel.getFont ().deriveFont (10f));
+		sizeLabel.setForeground(Color.WHITE);
 		
-		label5.setText("Description");
-		label5.setBounds(40, 190, 80, 20);
-		label5.setFont (label5.getFont ().deriveFont (10f));
-		label5.setForeground(Color.WHITE);
+		descriptionLabel.setText("Description");
+		descriptionLabel.setBounds(40, 190, 80, 20);
+		descriptionLabel.setFont (descriptionLabel.getFont ().deriveFont (10f));
+		descriptionLabel.setForeground(Color.WHITE);
 		
-		label6.setText("Price Per Hour");
-		label6.setBounds(40, 230, 80, 20);
-		label6.setFont (label6.getFont ().deriveFont (10f));
-		label6.setForeground(Color.WHITE);
+		priceLabel.setText("Price Per Hour");
+		priceLabel.setBounds(40, 230, 80, 20);
+		priceLabel.setFont (priceLabel.getFont ().deriveFont (10f));
+		priceLabel.setForeground(Color.WHITE);
 		
-		label7.setText("Cancellation Period");
-		label7.setBounds(40, 270, 120, 20);
-		label7.setFont (label7.getFont ().deriveFont (10f));
-		label7.setForeground(Color.WHITE);
+		cancellationLabel.setText("Cancellation Period");
+		cancellationLabel.setBounds(40, 270, 120, 20);
+		cancellationLabel.setFont (cancellationLabel.getFont ().deriveFont (10f));
+		cancellationLabel.setForeground(Color.WHITE);
 		
 		addSlots.setBounds(110, 330, 120, 20);
 		addSlots.setFont (addSlots.getFont ().deriveFont (13f));
 		addSlots.setForeground(Color.WHITE);
 		
-		text.setBounds(40, 90, 200, 20);
-		text2.setBounds(40, 130, 200, 20);
-		text3.setBounds(40, 170, 200, 20);
-		text4.setBounds(40, 210, 200, 20);
-		text5.setBounds(40, 250, 200, 20);
-		text6.setBounds(40, 290, 200, 20);
+		nameText.setBounds(40, 90, 200, 20);
+		locationText.setBounds(40, 130, 200, 20);
+		sizeText.setBounds(40, 170, 200, 20);
+		descriptionText.setBounds(40, 210, 200, 20);
+		priceText.setBounds(40, 250, 200, 20);
+		cancellationText.setBounds(40, 290, 200, 20);
 		
-		frame.add(panel2);
-		panel2.add(back1);
-		panel2.add(label);
-		panel2.add(label2);
-		panel2.add(label3);
-		panel2.add(label4);
-		panel2.add(label5);
-		panel2.add(label6);
-		panel2.add(label7);
-		panel2.add(addSlots);
-		panel2.add(text);
-		panel2.add(text2);
-		panel2.add(text3);
-		panel2.add(text4);
-		panel2.add(text5);
-		panel2.add(text6);
+		frame.add(addUpdatePanel);
+		addUpdatePanel.add(ownerBack1);
+		addUpdatePanel.add(header);
+		addUpdatePanel.add(PgNameLabel);
+		addUpdatePanel.add(locationLabel);
+		addUpdatePanel.add(sizeLabel);
+		addUpdatePanel.add(descriptionLabel);
+		addUpdatePanel.add(priceLabel);
+		addUpdatePanel.add(cancellationLabel);
+		addUpdatePanel.add(addSlots);
+		addUpdatePanel.add(nameText);
+		addUpdatePanel.add(locationText);
+		addUpdatePanel.add(sizeText);
+		addUpdatePanel.add(descriptionText);
+		addUpdatePanel.add(priceText);
+		addUpdatePanel.add(cancellationText);
 		
 		addSlots.addMouseListener(this);
 	}
 	
 	public void addSlotsFrame() {
-		panel2.setVisible(false);
-		panel3.setVisible(true);
-		panel3.setBackground(Color.DARK_GRAY);
-		panel3.setLayout(null);
+		addUpdatePanel.setVisible(false);
+		slotsPanel.setVisible(true);
+		slotsPanel.setBackground(new java.awt.Color(105,105,105));
+		slotsPanel.setLayout(null);
 		
-		label.setText("Add Slots");
-		label.setBounds(80, 25, 220, 50);
+		header.setText("Add Slots");
+		header.setBounds(80, 25, 220, 50);
 		
-		label2.setText("Day");
-		label2.setBounds(60, 110, 80, 30);
-		label2.setFont (label2.getFont ().deriveFont (12f));
-		label2.setForeground(Color.WHITE);
+		PgNameLabel.setText("Day");
+		PgNameLabel.setBounds(60, 110, 80, 30);
+		PgNameLabel.setFont (PgNameLabel.getFont ().deriveFont (12f));
+		PgNameLabel.setForeground(Color.WHITE);
 		
-		label3.setText("From");
-		label3.setBounds(60, 150, 80, 30);
-		label3.setFont (label3.getFont ().deriveFont (12f));
-		label3.setForeground(Color.WHITE);
+		locationLabel.setText("From");
+		locationLabel.setBounds(60, 150, 80, 30);
+		locationLabel.setFont (locationLabel.getFont ().deriveFont (12f));
+		locationLabel.setForeground(Color.WHITE);
 		
-		label4.setText("To");
-		label4.setBounds(60, 190, 80, 30);
-		label4.setFont (label4.getFont ().deriveFont (12f));
-		label4.setForeground(Color.WHITE);
+		sizeLabel.setText("To");
+		sizeLabel.setBounds(60, 190, 80, 30);
+		sizeLabel.setFont (sizeLabel.getFont ().deriveFont (12f));
+		sizeLabel.setForeground(Color.WHITE);
 		
-		done.setBackground(Color.ORANGE);
-		done.setForeground(Color.DARK_GRAY);
+		done.setBackground(new Color(255,134,0));
+		done.setForeground(Color.WHITE);
 		done.setBounds(100, 340, 80, 30);
 		
 		day.setText("");
@@ -326,16 +325,16 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 			
 		addSlots.setBounds(110, 300, 120, 20);
 		
-		frame.add(panel3);
-		panel3.add(label);
-		panel3.add(label2);
-		panel3.add(label3);
-		panel3.add(label4);
-		panel3.add(done);
-		panel3.add(day);
-		panel3.add(from);
-		panel3.add(to);
-		panel3.add(addSlots);
+		frame.add(slotsPanel);
+		slotsPanel.add(header);
+		slotsPanel.add(PgNameLabel);
+		slotsPanel.add(locationLabel);
+		slotsPanel.add(sizeLabel);
+		slotsPanel.add(done);
+		slotsPanel.add(day);
+		slotsPanel.add(from);
+		slotsPanel.add(to);
+		slotsPanel.add(addSlots);
 		
 		addSlots.addMouseListener(this);
 		done.addActionListener(this);
@@ -355,10 +354,10 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 * and it displays the bookings of the owner playground.
 	 */
 	public void viewBookings() {
-		panel.setVisible(false);
-		panel4.setVisible(true);
-		panel4.setBackground(Color.DARK_GRAY);
-		panel4.setLayout(null);
+		ownerHome.setVisible(false);
+		vBookingPanel.setVisible(true);
+		vBookingPanel.setBackground(new java.awt.Color(105,105,105));
+		vBookingPanel.setLayout(null);
 		
 		JList list = new JList(slots);
 		
@@ -366,24 +365,25 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		list.setForeground(Color.black);
 		list.setBounds(40, 130, 200, 200);
 		
-		label.setText("Bookings");
-		label.setBounds(100, 50, 180, 50);
+		header.setText("Bookings");
+		header.setBounds(100, 50, 180, 50);
 		
-		back1Details();
+		ownerBack1Details();
 		
-		frame.add(panel4);
-		panel4.add(back1);
-		panel4.add(list);
-		panel4.add(label);
+		frame.add(vBookingPanel);
+		vBookingPanel.add(ownerBack1);
+		vBookingPanel.add(list);
+		vBookingPanel.add(header);
 	}
 	
 	/**
 	 * This function to store bookings slots into 'data' array
 	 */
 	private void storePlaygroundsTitle() {
+		slots.clear();
 		for (int i = 0 ; i < ownerBookingHistory.size() ; i++) {
-			slots[i] = "From " + String.valueOf(ownerBookingHistory.get(i).item.timeSlot.getStartTime()) + " to "
-					+ String.valueOf(ownerBookingHistory.get(i).item.timeSlot.getEndTime());
+			slots.add(ownerBookingHistory.get(i).item.timeSlot.getDay() + "From " + String.valueOf(ownerBookingHistory.get(i).item.timeSlot.getStartTime()) + " to "
+					+ String.valueOf(ownerBookingHistory.get(i).item.timeSlot.getEndTime()));
 		}
 	}
 	
@@ -392,12 +392,12 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 * and it displays the statue of the owner eWallet.
 	 */
 	public void checkEwallet() {
-		panel.setVisible(false);
-		panel5.setVisible(true);
-		panel5.setBackground(Color.DARK_GRAY);
-		panel5.setLayout(null);
+		ownerHome.setVisible(false);
+		eWalletPanel.setVisible(true);
+		eWalletPanel.setBackground(new java.awt.Color(105,105,105));
+		eWalletPanel.setLayout(null);
 		
-		label.setText("eWallet");
+		header.setText("eWallet");
 		
 		String str;
 		
@@ -412,25 +412,25 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		lmoney.setForeground(Color.WHITE);
 		lid.setForeground(Color.WHITE);
 		
-		back1Details();
+		ownerBack1Details();
 		
-		frame.add(panel5);
-		panel5.add(label);
-		panel5.add(lmoney);
-		panel5.add(lid);
-		panel5.add(back1);
+		frame.add(eWalletPanel);
+		eWalletPanel.add(header);
+		eWalletPanel.add(lmoney);
+		eWalletPanel.add(lid);
+		eWalletPanel.add(ownerBack1);
 	}
 	
 	/**
 	 * To set back details(color, font, ...)
 	 */
-	private void back1Details() {
-		back1.setBounds(5, 5, 50, 30);
-		back1.setFont (back1.getFont ().deriveFont (10f));
-		back1.setBackground(Color.ORANGE);
-		back1.setForeground(Color.DARK_GRAY);
+	private void ownerBack1Details() {
+		ownerBack1.setBounds(5, 5, 50, 30);
+		ownerBack1.setFont (ownerBack1.getFont ().deriveFont (10f));
+		ownerBack1.setBackground(new Color(255,134,0));
+		ownerBack1.setForeground(Color.white);
 		
-		back1.addActionListener(this);
+		ownerBack1.addActionListener(this);
 	}
 	
 	/**
@@ -438,30 +438,30 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 */
 	public void actionPerformed(ActionEvent e) {
 		
-		if (e.getSource() == button) {
+		if (e.getSource() == addPgButton) {
 			if (myPlayground.getId() == 0) {
 				toAddPlayground();
 			}
 		}
-		if (e.getSource() == button2) {
+		if (e.getSource() == updatePgButton) {
 			if (myPlayground.getId() != 0) {
 				updatePlayground();
 			}
 		}
-		if (e.getSource() == button3) {
+		if (e.getSource() == vBookingButton) {
 			viewBookings();
 		}
-		if (e.getSource() == button4) {
+		if (e.getSource() == eWalletButton) {
 			checkEwallet();
 		}
-		if (e.getSource() == button5) {
+		if (e.getSource() == addButton) {
 			getPlaygroundData();
 			displayWelcome();
 			if (Administrator.approvePlayground(request)) {
 				approvedAddPlayground();
 			}
 		}
-		if (e.getSource() == button6) {
+		if (e.getSource() == updateButton) {
 			getPlaygroundData();
 			displayWelcome();
 			if (Administrator.approvePlayground(request)) {
@@ -471,7 +471,7 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		if (e.getSource() == done) {
 			toAddPlayground();
 		}
-		if (e.getSource() == back1) {
+		if (e.getSource() == ownerBack1) {
 			displayWelcome();
 		}
 	}
@@ -510,6 +510,8 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		
 	}
 }
+
+
 
 
 
