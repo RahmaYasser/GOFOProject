@@ -21,7 +21,7 @@ import static GOFO2.Main.currentPlayer;
 
 public class GUI extends JFrame implements MouseListener{
     private JCheckBox checkBox;
-    private JFrame jFrameShowPlayGround, jFrame1;
+    private JFrame jFrameShowPlayGround, jFrame1, loginFrame,registerFrame ,verivicationFrame;
     private Border border = BorderFactory.createLineBorder(Color.white, 1);
     private Border orangeBorder = BorderFactory.createLineBorder(new Color(255,134,0),2);
     private JTextField UserEmailTF,registerNameTF,registerEmailTF,registerPhoneTF,registerLocationTF,codeTF,registerIDTF,playerEmailTF;
@@ -39,14 +39,451 @@ public class GUI extends JFrame implements MouseListener{
     private JComboBox DaysList,startTimeList,endTimeList;
     private JScrollPane scrollPane;
     private JList list1,list2;
-    static int ItemIndex=0,BookingIndex=0;
+    static int ItemIndex=0,BookingIndex=0, generatedCode;
     static boolean state;
     TimeSlot timeSlot;
     public boolean checked=false;
-    String notification;
+    private String notification;
+    private String tmpName="",tmpEmail="",tmpPassword="",tmpLocation="",tmpPhone="",tmpID="";
+
+    JFrame frame = new JFrame();
+    JPanel ownerHome = new JPanel();
+    JPanel addUpdatePanel = new JPanel();
+    JPanel slotsPanel = new JPanel();
+    JPanel vBookingPanel = new JPanel();
+    JPanel eWalletPanel = new JPanel();
+    JLabel header = new JLabel();
+    JLabel PgNameLabel = new JLabel("Name");
+    JLabel locationLabel = new JLabel("Location");
+    JLabel sizeLabel = new JLabel("Size");
+    JLabel descriptionLabel = new JLabel("Description");
+    JLabel priceLabel = new JLabel("Price Per Hour");
+    JLabel cancellationLabel = new JLabel("Cancellation Period");
+    JLabel addSlots = new JLabel("Add Slots");
+    JLabel viewSlots = new JLabel("View Slots");
+    //JLabel logout = new JLabel("logout");
+    JLabel lmoney = new JLabel();
+    JLabel lid = new JLabel();
+    JTextField nameText = new JTextField();
+    JTextField locationText = new JTextField();
+    JTextField sizeText = new JTextField();
+    JTextField descriptionText = new JTextField();
+    JTextField priceText = new JTextField();
+    JTextField cancellationText = new JTextField();
+    JTextField day = new JTextField();
+    JTextField from = new JTextField();
+    JTextField to = new JTextField();
+    JButton addPgButton = new JButton("Add Playground");
+    JButton updatePgButton = new JButton("Update Playground");
+    JButton vBookingButton = new JButton("View Bookings");
+    JButton eWalletButton = new JButton("Status & eWallet");
+    JButton addPlaygroundButton = new JButton("Add");
+    JButton updateButton = new JButton("Update");
+    JButton done = new JButton("Done");
+    JButton ownerBack1 = new JButton("<<");
+
 
 
     ActionInterface obj = new ActionInterface();
+
+
+    /**
+     * This function builds the welcome page of the playground owner
+     */
+    private void ownerOptions() {
+        ownerHome.setVisible(true);
+        addUpdatePanel.setVisible(false);
+        slotsPanel.setVisible(false);
+        vBookingPanel.setVisible(false);
+        eWalletPanel.setVisible(false);
+
+        frame.setTitle("GoFo");
+        frame.setSize(300, 450);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setLocation(650, 200);
+        ownerHome.setLayout(null);
+        ownerHome.setBackground(new java.awt.Color(105,105,105));
+
+        addPgButton.setBackground(new Color(255,134,0));
+        addPgButton.setForeground(Color.white);
+        addPgButton.setBounds(20, 200, 110, 50);
+        addPgButton.setFont (header.getFont ().deriveFont (9f));
+
+        updatePgButton.setBackground(new Color(255,134,0));
+        updatePgButton.setForeground(Color.white);
+        updatePgButton.setBounds(160, 200, 110, 50);
+        updatePgButton.setFont (header.getFont ().deriveFont (8f));
+
+        vBookingButton.setBackground(new Color(255,134,0));
+        vBookingButton.setForeground(Color.white);
+        vBookingButton.setBounds(20, 270, 110, 50);
+        vBookingButton.setFont (header.getFont ().deriveFont (9f));
+
+        eWalletButton.setBackground(new Color(255,134,0));
+        eWalletButton.setForeground(Color.white);
+        eWalletButton.setBounds(160, 270, 110, 50);
+        eWalletButton.setFont (header.getFont ().deriveFont (9f));
+
+
+        header.setForeground(Color.WHITE);
+        header.setText("WELCOME");
+        header.setFont (header.getFont ().deriveFont (23f));
+        header.setBounds(80, 50, 130, 50);
+
+        Logout=new JLabel("logout");
+        Logout.setForeground(Color.WHITE);
+        Logout.setBounds(120, 340, 130, 50);
+        Logout.addMouseListener(this);
+
+        frame.add(ownerHome);
+        ownerHome.add(addPgButton);
+        ownerHome.add(updatePgButton);
+        ownerHome.add(vBookingButton);
+        ownerHome.add(eWalletButton);
+        ownerHome.add(header);
+        ownerHome.add(Logout);
+
+        addPgButton.addActionListener(obj);
+        updatePgButton.addActionListener(obj);
+        vBookingButton.addActionListener(obj);
+        eWalletButton.addActionListener(obj);
+    }
+
+    /**
+     * This function displays when the owner presses on the add playground button,
+     * then he fills the information of his playground
+     */
+    private void toAddPlayground() {
+
+        formDetails();
+
+        header.setText("Add Playground");
+        header.setBounds(50, 30, 180, 50);
+
+        addPlaygroundButton.setBackground(new Color(255,134,0));
+        addPlaygroundButton.setForeground(Color.WHITE);
+        addPlaygroundButton.setBounds(100, 375, 80, 30);
+        addPlaygroundButton.setVisible(true);
+        updateButton.setVisible(false);
+
+        ownerBack1Details();
+
+        addUpdatePanel.add(addPlaygroundButton);
+        addPlaygroundButton.addActionListener(obj);
+    }
+
+
+    /**
+     * To check if all fields are filled or not.
+     * If all fields are filled, they are stored and the request will be ok.
+     * If not, the request will be error because of uncompleted information.
+     */
+    public void getPlaygroundData() {
+        if (!nameText.getText().contentEquals("") && !locationText.getText().contentEquals("") && !sizeText.getText().contentEquals("")
+                && !descriptionText.getText().contentEquals("") && !priceText.getText().contentEquals("") && !cancellationText.getText().contentEquals("")) {
+
+            currentOwner.myPlayground.setName(nameText.getText());
+            currentOwner.myPlayground.setLocation(locationText.getText());
+            currentOwner.myPlayground.setSize(Double.parseDouble(sizeText.getText()));
+            currentOwner.myPlayground.setDescription(descriptionText.getText());
+            currentOwner.myPlayground.setPricePerHour(Double.parseDouble(priceText.getText()));
+            currentOwner.myPlayground.setCancellationPeriod(Integer.parseInt(cancellationText.getText()));
+            currentOwner.request = "ok";
+        }
+        else {
+            currentOwner.request = "error";
+        }
+    }
+
+    /**
+     * This function displays when the owner presses on the update playground button,
+     * Then he can show or modify his playground information.
+     */
+    public void updatePlayground() {
+
+        formDetails();
+
+        header.setText("Update Playground");
+        header.setBounds(30, 25, 220, 50);
+
+        updateButton.setBackground(new Color(255,134,0));
+        updateButton.setForeground(Color.WHITE);
+        updateButton.setBounds(100, 375, 80, 30);
+        updateButton.setVisible(true);
+        addPlaygroundButton.setVisible(false);
+
+        ownerBack1Details();
+
+        String str;
+
+        nameText.setText(currentOwner.myPlayground.getName());
+        locationText.setText(currentOwner.myPlayground.getLocation());
+        str = String.valueOf(currentOwner.myPlayground.getSize());
+        sizeText.setText(str);
+        descriptionText.setText(currentOwner.myPlayground.getDescription());
+        str = String.valueOf(currentOwner.myPlayground.getPricePerHour());
+        priceText.setText(str);
+        str = String.valueOf(currentOwner.myPlayground.getCancellationPeriod());
+        cancellationText.setText(str);
+
+        addUpdatePanel.add(updateButton);
+        updateButton.addActionListener(obj);
+    }
+
+    /**
+     * If the admin approved the playground, the playground is stored in the array list
+     */
+    private void approvedAddPlayground() {
+        AvailablePlaygrounds.playgrounds.add(currentOwner.myPlayground);
+        currentOwner.myPlayground.setId(AvailablePlaygrounds.playgrounds.size());
+    }
+
+    /**
+     * If the admin approved the playground update, the playground is modified in the array list
+     */
+    private void approvedUpdatePlayground() {
+        int index = currentOwner.myPlayground.getId();
+        AvailablePlaygrounds.playgrounds.get(index-1).equals(currentOwner.myPlayground);
+    }
+
+    /**
+     * To build the window of the add playground button and update playground button.
+     */
+    private void formDetails() {
+        ownerHome.setVisible(false);
+        slotsPanel.setVisible(false);
+        addUpdatePanel.setVisible(true);
+        addUpdatePanel.setBackground(new java.awt.Color(105,105,105));
+        addUpdatePanel.setLayout(null);
+
+        PgNameLabel.setText("Name");
+        PgNameLabel.setBounds(40, 70, 80, 20);
+        PgNameLabel.setFont (PgNameLabel.getFont ().deriveFont (10f));
+        PgNameLabel.setForeground(Color.WHITE);
+
+        locationLabel.setText("Location");
+        locationLabel.setBounds(40, 110, 80, 20);
+        locationLabel.setFont (locationLabel.getFont ().deriveFont (10f));
+        locationLabel.setForeground(Color.WHITE);
+
+        sizeLabel.setText("Size");
+        sizeLabel.setBounds(40, 150, 80, 20);
+        sizeLabel.setFont (sizeLabel.getFont ().deriveFont (10f));
+        sizeLabel.setForeground(Color.WHITE);
+
+        descriptionLabel.setText("Description");
+        descriptionLabel.setBounds(40, 190, 80, 20);
+        descriptionLabel.setFont (descriptionLabel.getFont ().deriveFont (10f));
+        descriptionLabel.setForeground(Color.WHITE);
+
+        priceLabel.setText("Price Per Hour");
+        priceLabel.setBounds(40, 230, 80, 20);
+        priceLabel.setFont (priceLabel.getFont ().deriveFont (10f));
+        priceLabel.setForeground(Color.WHITE);
+
+        cancellationLabel.setText("Cancellation Period");
+        cancellationLabel.setBounds(40, 270, 120, 20);
+        cancellationLabel.setFont (cancellationLabel.getFont ().deriveFont (10f));
+        cancellationLabel.setForeground(Color.WHITE);
+
+        addSlots.setBounds(110, 330, 120, 20);
+        addSlots.setFont (addSlots.getFont ().deriveFont (13f));
+        addSlots.setForeground(Color.WHITE);
+
+        nameText.setBounds(40, 90, 200, 20);
+        locationText.setBounds(40, 130, 200, 20);
+        sizeText.setBounds(40, 170, 200, 20);
+        descriptionText.setBounds(40, 210, 200, 20);
+        priceText.setBounds(40, 250, 200, 20);
+        cancellationText.setBounds(40, 290, 200, 20);
+
+        frame.add(addUpdatePanel);
+        addUpdatePanel.add(ownerBack1);
+        addUpdatePanel.add(header);
+        addUpdatePanel.add(PgNameLabel);
+        addUpdatePanel.add(locationLabel);
+        addUpdatePanel.add(sizeLabel);
+        addUpdatePanel.add(descriptionLabel);
+        addUpdatePanel.add(priceLabel);
+        addUpdatePanel.add(cancellationLabel);
+        addUpdatePanel.add(addSlots);
+        addUpdatePanel.add(nameText);
+        addUpdatePanel.add(locationText);
+        addUpdatePanel.add(sizeText);
+        addUpdatePanel.add(descriptionText);
+        addUpdatePanel.add(priceText);
+        addUpdatePanel.add(cancellationText);
+
+        addSlots.addMouseListener(this);
+    }
+
+    public void addSlotsFrame() {
+        addUpdatePanel.setVisible(false);
+        slotsPanel.setVisible(true);
+        slotsPanel.setBackground(new java.awt.Color(105,105,105));
+        slotsPanel.setLayout(null);
+
+        header.setText("Add Slots");
+        header.setBounds(80, 25, 220, 50);
+
+        PgNameLabel.setText("Day");
+        PgNameLabel.setBounds(60, 110, 80, 30);
+        PgNameLabel.setFont (PgNameLabel.getFont ().deriveFont (12f));
+        PgNameLabel.setForeground(Color.WHITE);
+
+        locationLabel.setText("From");
+        locationLabel.setBounds(60, 150, 80, 30);
+        locationLabel.setFont (locationLabel.getFont ().deriveFont (12f));
+        locationLabel.setForeground(Color.WHITE);
+
+        sizeLabel.setText("To");
+        sizeLabel.setBounds(60, 190, 80, 30);
+        sizeLabel.setFont (sizeLabel.getFont ().deriveFont (12f));
+        sizeLabel.setForeground(Color.WHITE);
+
+        done.setBackground(new Color(255,134,0));
+        done.setForeground(Color.WHITE);
+        done.setBounds(100, 340, 80, 30);
+
+        day.setText("");
+        from.setText("");
+        to.setText("");
+
+        day.setBounds(100, 110, 80, 30);
+        from.setBounds(100, 150, 80, 30);
+        to.setBounds(100, 190, 80, 30);
+
+        addSlots.setBounds(110, 300, 120, 20);
+
+        frame.add(slotsPanel);
+        slotsPanel.add(header);
+        slotsPanel.add(PgNameLabel);
+        slotsPanel.add(locationLabel);
+        slotsPanel.add(sizeLabel);
+        slotsPanel.add(done);
+        slotsPanel.add(day);
+        slotsPanel.add(from);
+        slotsPanel.add(to);
+        slotsPanel.add(addSlots);
+
+        addSlots.addMouseListener(this);
+        done.addActionListener(obj);
+    }
+
+    public void storeSlots() {
+        if (!day.getText().contentEquals("") && !from.getText().contentEquals("") && !to.getText().contentEquals("")) {
+            TimeSlot slot = new TimeSlot();
+            slot.setDay(day.getText());
+            slot.setEndTime(Integer.parseInt(to.getText()));
+            currentOwner.myPlayground.timeSlot.add(slot);
+        }
+    }
+
+    /**
+     * This function displays when the owner presses on the vie bookings button,
+     * and it displays the bookings of the owner playground.
+     */
+    public void viewBookings() {
+        ownerHome.setVisible(false);
+        vBookingPanel.setVisible(true);
+        vBookingPanel.setBackground(new java.awt.Color(105,105,105));
+        vBookingPanel.setLayout(null);
+
+        JList list = new JList(currentOwner.slots);
+        class MyCellRenderer extends DefaultListCellRenderer {
+            public static final String HTML_1 = "<html><body style='width: ";
+            public static final String HTML_2 = "px'>";
+            public static final String HTML_3 = "</html>";
+            private int width;
+
+            public MyCellRenderer(int width) {
+                this.width = width;
+            }
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                                                          int index, boolean isSelected, boolean cellHasFocus) {
+                String text = HTML_1 + String.valueOf(width) + HTML_2 + value.toString()
+                        + HTML_3;
+                return super.getListCellRendererComponent(list, text, index, isSelected,
+                        cellHasFocus);
+            }
+
+        }
+
+        list.setBackground(Color.WHITE);
+        list.setForeground(Color.black);
+        list.setBounds(40, 130, 200, 200);
+        MyCellRenderer cellRenderer = new MyCellRenderer(200);
+        list.setCellRenderer(cellRenderer);
+        header.setText("Bookings");
+        header.setBounds(100, 50, 180, 50);
+
+        ownerBack1Details();
+
+        frame.add(vBookingPanel);
+        vBookingPanel.add(ownerBack1);
+        vBookingPanel.add(list);
+        vBookingPanel.add(header);
+    }
+
+    /**
+     * This function to store bookings slots into 'data' array
+     */
+    private void storePlaygroundsTitle() {
+        currentOwner.slots.clear();
+        for (int i = 0 ; i < currentOwner.bookingHistory.size() ; i++) {
+            currentOwner.slots.add(currentOwner.bookingHistory.get(i).item.timeSlot.getDay() + "From " + String.valueOf(currentOwner.bookingHistory.get(i).item.timeSlot.getStartTime()) + " to "
+                    + String.valueOf(currentOwner.bookingHistory.get(i).item.timeSlot.getEndTime()));
+        }
+    }
+
+    /**
+     * This function displays when the owner presses on the update playground button,
+     * and it displays the statue of the owner eWallet.
+     */
+    public void checkEwallet() {
+        ownerHome.setVisible(false);
+        eWalletPanel.setVisible(true);
+        eWalletPanel.setBackground(new java.awt.Color(105,105,105));
+        eWalletPanel.setLayout(null);
+
+        header.setText("eWallet");
+
+        String str;
+
+        str = "Your Money: " + String.valueOf(currentOwner.getUserEwallet().getCurrentMoney());
+        lmoney.setText(str);
+        str = "Your eWallet ID: " + String.valueOf(currentOwner.getUserEwallet().getId());
+        lid.setText(str);
+
+        lmoney.setBounds(50, 120, 150, 50);
+        lid.setBounds(50, 150, 150, 50);
+
+        lmoney.setForeground(Color.WHITE);
+        lid.setForeground(Color.WHITE);
+
+        ownerBack1Details();
+
+        frame.add(eWalletPanel);
+        eWalletPanel.add(header);
+        eWalletPanel.add(lmoney);
+        eWalletPanel.add(lid);
+        eWalletPanel.add(ownerBack1);
+    }
+
+    /**
+     * To set back details(color, font, ...)
+     */
+    private void ownerBack1Details() {
+        ownerBack1.setBounds(5, 5, 50, 30);
+        ownerBack1.setFont (ownerBack1.getFont ().deriveFont (10f));
+        ownerBack1.setBackground(new Color(255,134,0));
+        ownerBack1.setForeground(Color.white);
+        ownerBack1.addActionListener(obj);
+    }
 
 
     public void mail(String to,String code,String name){
@@ -70,7 +507,7 @@ public class GUI extends JFrame implements MouseListener{
 
             protected PasswordAuthentication getPasswordAuthentication() {
 
-                return new PasswordAuthentication(from, "*********");
+                return new PasswordAuthentication(from, "sqltoll)toll(..12*.*122");
 
             }
 
@@ -137,10 +574,10 @@ public class GUI extends JFrame implements MouseListener{
             registerPage();
             setVisible(false);
         }
-        if(e.getSource() == playerOptionsLabelOne) PlayerOptionOne();
-        if(e.getSource() == playerOptionsLabelTwo) PlayerOptionTwo();
-        if(e.getSource() == playerOptionsLabelthree);PlayerOptionThree();
-        if(e.getSource() == playerOptionsLabelFour) PlayerOptionFour();
+        //if(e.getSource() == playerOptionsLabelOne) PlayerOptionOne();
+        //if(e.getSource() == playerOptionsLabelTwo) PlayerOptionTwo();
+        //if(e.getSource() == playerOptionsLabelthree);PlayerOptionThree();
+        //if(e.getSource() == playerOptionsLabelFour) PlayerOptionFour();
         if(e.getSource() == returnToOptions) {
             jFrame1.setVisible(false);
             playerOptions();
@@ -155,6 +592,10 @@ public class GUI extends JFrame implements MouseListener{
             currentPlayer = null;
             currentOwner = null;
             LoginPage();
+        }
+        if (e.getSource() == addSlots) {
+            storeSlots();
+            addSlotsFrame();
         }
 
 
@@ -259,9 +700,9 @@ public class GUI extends JFrame implements MouseListener{
 
     public void LoginPage(){
         //TODO show options
-
+        loginFrame = new JFrame();
         // img logo
-        this.setContentPane(new JPanel() {
+        loginFrame.setContentPane(new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -273,14 +714,14 @@ public class GUI extends JFrame implements MouseListener{
 
 
         // frame handling
-        setTitle("Welcome User");
-        setResizable(false);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
-        setSize(350,570);
-        setLocation(500,30);
-        this.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        loginFrame.setTitle("Welcome User");
+        loginFrame.setResizable(false);
+        loginFrame.setVisible(true);
+        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setLayout(null);
+        loginFrame.setSize(350,570);
+        loginFrame.setLocation(500,30);
+        loginFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
 
 
@@ -343,25 +784,23 @@ public class GUI extends JFrame implements MouseListener{
         errorInSignInLabel.setForeground(new Color(255,134,0));
 
 
-        this.add(emailLabel);this.add(UserEmailTF);this.add(PasswordLabel);this.add(UserPF);this.add(LoginButton);this.add(NewUserLabel);this.add(SignUpLabel);this.add(errorInSignInLabel);
-
-
-
+        loginFrame.add(emailLabel);loginFrame.add(UserEmailTF);loginFrame.add(PasswordLabel);loginFrame.add(UserPF);
+        loginFrame.add(LoginButton);loginFrame.add(NewUserLabel);loginFrame.add(SignUpLabel);loginFrame.add(errorInSignInLabel);
         LoginButton.addActionListener(obj);
 
 
     }
     public void registerPage(){
-
-        JFrame jFrame = new JFrame();
-        jFrame.setTitle("New Account");
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLayout(null);
-        jFrame.setSize(400,650+85-20);
-        jFrame.setLocation(500,100);
-        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        loginFrame.setVisible(false);
+        registerFrame = new JFrame();
+        registerFrame.setTitle("New Account");
+        registerFrame.setResizable(false);
+        registerFrame.setVisible(true);
+        registerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        registerFrame.setLayout(null);
+        registerFrame.setSize(400,650+85-20);
+        registerFrame.setLocation(500,0);
+        registerFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
         registerNameLabel = new JLabel("Name: ");
         registerNameLabel.setBounds(10,30,300,35);
@@ -434,7 +873,7 @@ public class GUI extends JFrame implements MouseListener{
         registerLocationTF.addMouseListener(this);
 
 
-        eWalletLabel = new JLabel("ID");
+        eWalletLabel = new JLabel("eWallet ID");
         eWalletLabel.setBounds(10,455,300,35);
         eWalletLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         eWalletLabel.setForeground(Color.white);
@@ -478,25 +917,27 @@ public class GUI extends JFrame implements MouseListener{
         errorInSignUpLabel.setFont(new Font(Font.DIALOG, Font.PLAIN,14));
         errorInSignUpLabel.setForeground(new Color(255,134,0));
 
-        jFrame.add(registerNameLabel);jFrame.add(registerEmailLabel);jFrame.add(registerPasswordLabel);jFrame.add(registerLocationLabel);jFrame.add(registerPhoneLabel);
-        jFrame.add(registerNameTF);jFrame.add(registerEmailTF);jFrame.add(registerLocationTF);jFrame.add(registerPhoneTF);jFrame.add(registerPF);
-        jFrame.add(SignUPButton);
-        jFrame.add(r1);jFrame.add(r2);
-        jFrame.add(errorInSignUpLabel);
-        jFrame.add(eWalletLabel);jFrame.add(registerIDTF);
+        registerFrame.add(registerNameLabel);registerFrame.add(registerEmailLabel);registerFrame.add(registerPasswordLabel);registerFrame.add(registerLocationLabel);registerFrame.add(registerPhoneLabel);
+        registerFrame.add(registerNameTF);registerFrame.add(registerEmailTF);registerFrame.add(registerLocationTF);registerFrame.add(registerPhoneTF);registerFrame.add(registerPF);
+        registerFrame.add(SignUPButton);
+        registerFrame.add(r1);registerFrame.add(r2);
+        registerFrame.add(errorInSignUpLabel);
+        registerFrame.add(eWalletLabel);registerFrame.add(registerIDTF);
 
 
     }
     public void verificationCodePage(){
-        JFrame jFrame = new JFrame();
-        jFrame.setTitle("Account Activation");
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLayout(null);
-        jFrame.setSize(350,300);
-        jFrame.setLocation(500,100);
-        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
+
+        registerFrame.setVisible(false);
+        verivicationFrame = new JFrame();
+        verivicationFrame.setTitle("Account Activation");
+        verivicationFrame.setResizable(false);
+        verivicationFrame.setVisible(true);
+        verivicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        verivicationFrame.setLayout(null);
+        verivicationFrame.setSize(350,300);
+        verivicationFrame.setLocation(500,100);
+        verivicationFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
         verificationLabel = new JLabel("Check your mail box and verify your account");
         verificationLabel.setBounds(20,30,350,35);
@@ -525,11 +966,11 @@ public class GUI extends JFrame implements MouseListener{
         incorrectCodeLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 11));
         incorrectCodeLabel.setForeground(new Color(255,134,0));
 
-        jFrame.add(codeTF);
-        jFrame.add(verificationButton);jFrame.add(incorrectCodeLabel);
-        jFrame.add(verificationLabel);
+        verivicationFrame.add(codeTF);
+        verivicationFrame.add(verificationButton);verivicationFrame.add(incorrectCodeLabel);
+        verivicationFrame.add(verificationLabel);
     }
-    public void PlayerOptionOne(){
+   /* public void PlayerOptionOne(){
         timeSlot = new TimeSlot();
 
 
@@ -581,10 +1022,10 @@ public class GUI extends JFrame implements MouseListener{
 
         jFrameShowPlayGround.add(startTimeList);jFrameShowPlayGround.add(endTimeList);jFrameShowPlayGround.add(DaysList);
         jFrameShowPlayGround.add(selectTimeIntervalLabel);jFrameShowPlayGround.add(showPlaygroundsButton);
-    }
+    }*/
 
 
-    public void PlayerOptionTwo(){
+    /*public void PlayerOptionTwo(){
 
 
         jFrame1 = new JFrame();
@@ -637,9 +1078,9 @@ public class GUI extends JFrame implements MouseListener{
 
         jFrame1.add(scrollPane2);
         jFrame1.add(returnToOptions);
-    }
+    }*/
 
-    public void PlayerOptionThree(){
+    /*public void PlayerOptionThree(){
         JFrame jFrame = new JFrame();
         jFrame.setTitle("");
         jFrame.setResizable(false);
@@ -688,9 +1129,9 @@ public class GUI extends JFrame implements MouseListener{
         jFrame.add(returnToOptions3);
 
 
-    }
+    }*/
 
-    public void PlayerOptionFour(){
+    /*public void PlayerOptionFour(){
         JFrame jFrame = new JFrame();
         jFrame.setTitle("");
         jFrame.setResizable(false);
@@ -711,7 +1152,7 @@ public class GUI extends JFrame implements MouseListener{
         NotificationLabel.setForeground(Color.white);
         NotificationLabel.setBorder(border);
         jFrame.add(NotificationLabel);
-    }
+    }*/
     public void showBookingInfo(Booking booking,PlaygroundOwner playgroundOwner){
         JFrame jFrame = new JFrame();
         jFrame.setResizable(false);
@@ -790,6 +1231,42 @@ public class GUI extends JFrame implements MouseListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == addPgButton) {
+                if (currentOwner.myPlayground.getId() == 0) {
+                    toAddPlayground();
+                }
+            }
+            if (e.getSource() == updatePgButton) {
+                if (currentOwner.myPlayground.getId() != 0) {
+                    updatePlayground();
+                }
+            }
+            if (e.getSource() == vBookingButton) {
+                viewBookings();
+            }
+            if (e.getSource() == eWalletButton) {
+                checkEwallet();
+            }
+            if (e.getSource() == addPlaygroundButton) {
+                getPlaygroundData();
+                ownerOptions();
+                if (Administrator.approvePlayground(currentOwner.request)) {
+                    approvedAddPlayground();
+                }
+            }
+            if (e.getSource() == updateButton) {
+                getPlaygroundData();
+                ownerOptions();
+                if (Administrator.approvePlayground(currentOwner.request)) {
+                    approvedUpdatePlayground();
+                }
+            }
+            if (e.getSource() == done) {
+                toAddPlayground();
+            }
+            if (e.getSource() == ownerBack1) {
+                ownerOptions();
+            }
             if(e.getSource() == addButton){
                 String mail = playerEmailTF.getText().toString();
                 boolean found=false;
@@ -834,73 +1311,89 @@ public class GUI extends JFrame implements MouseListener{
             }
             if(e.getSource() == LoginButton) {
                 String email = UserEmailTF.getText().toString();
-                String password = UserPF.getPassword().toString();
+                String password = new String(UserPF.getPassword());
 
-                Player player=new Player();
-                PlaygroundOwner playgroundOwner=new PlaygroundOwner();
                 boolean foundInPlayer=false,foundInOwner=false;
-                for( int i=0;i<Account.Players.size();i++){
-                    player = Account.Players.get(i);
-                    if(player.getEmail().equals(email) && player.getPassword().equals(password))foundInPlayer=true;break;
+                for(Player player1:Account.Players){
+
+                    if(player1.getEmail().equals(email) && player1.getPassword().equals(password)){
+                        currentPlayer = player1;
+                        playerOptions();
+                        loginFrame.setVisible(false);
+                        errorInSignInLabel.setText("");
+                        return;
+                    }
                 }
-                for( int i=0;i<Account.Owners.size();i++){
-                    playgroundOwner = Account.Owners.get(i);
-                    if(playgroundOwner.getEmail().equals(email) && playgroundOwner.getPassword().equals(password))foundInOwner=true;break;
+                for( PlaygroundOwner playgroundOwner1:Account.Owners){
+
+                    System.out.println("account owner email"+playgroundOwner1.getEmail());
+                    System.out.println("account owner pass"+playgroundOwner1.getPassword());
+
+                    if(playgroundOwner1.getEmail().equals(email) && playgroundOwner1.getPassword().equals(password)){
+                        currentOwner = playgroundOwner1;
+                        ownerOptions();
+                        loginFrame.setVisible(false);
+                        errorInSignInLabel.setText("");
+                        return;
+                    }
                 }
-                if(!(foundInPlayer||foundInOwner)) errorInSignInLabel.setText("Incorrect email or password");
-                else {
-                    if(foundInPlayer)currentPlayer = player;
-                    else currentOwner = playgroundOwner;
-                    errorInSignInLabel.setText("");
-                }
-                return;
+                //if(!(foundInPlayer||foundInOwner))
+                errorInSignInLabel.setText("Incorrect email or password");
+
             }
-            String accountType="";int x=0;
-            //if(r1.isSelected()) accountType="p";
-            //if(r2.isSelected()) accountType="o";
+            String accountType="";
+
+            if(r1.isSelected()) accountType="p";
+            if(r2.isSelected()) accountType="o";
             if(e.getSource() == SignUPButton ){
-                String tmpName,tmpEmail,tmpPassword,tmpLocation,tmpPhone,tmpID;
+
                 tmpName = registerNameTF.getText().toString();
                 tmpEmail = registerEmailTF.getText().toString();
-                tmpPassword = registerPF.getPassword().toString();
+                tmpPassword =new String(registerPF.getPassword());
                 tmpPhone = registerPhoneTF.getText().toString();
                 tmpLocation = registerLocationTF.getText().toString();
                 tmpID = registerIDTF.getText().toString();
 
-                if(registerIDTF.equals("") ||tmpEmail.equals("")|| tmpLocation.equals("")||tmpName.equals("")||tmpPassword.equals("")||tmpPhone.equals("") || accountType.equals("")) errorInSignUpLabel.setText("Please enter all sections");
+                if(tmpEmail.equals("")|| tmpLocation.equals("")||tmpName.equals("")||tmpPassword.equals("")||tmpPhone.equals("") || accountType.equals("") || tmpID.equals("")) errorInSignUpLabel.setText("Please enter all sections");
                 else if(isValid(tmpEmail)){
-                    x = (int) (Math.random() * (89467892 - 34278564 + 1)) + 34278564;
-                    mail(tmpEmail,String.valueOf(x),tmpName);
+                    generatedCode = (int) (Math.random() * (89467892 - 34278564 + 1)) + 34278564;
+                   // mail(tmpEmail,String.valueOf(generatedCode),tmpName);
+                    System.out.println(generatedCode);
+                    registerFrame.setVisible(false);
                     verificationCodePage();
                 }
                 else{
                     errorInSignUpLabel.setText("Invalid email address");
                 }
-                if(e.getSource()==verificationButton){
-                    String enteredCode = codeTF.getText().toString();
-                    if(enteredCode.equals(String.valueOf(x))){
-                        if(accountType.equals("p")){
-                            Player player = new Player();
-                            player.setName(tmpName);player.setPassword(tmpPassword);player.setEmail(tmpEmail);player.setPhone(tmpPhone);player.setLocation(tmpLocation);
-                            Account.Players.add(player);
-                            currentPlayer = player;
-                        }
-                        else {
-                            PlaygroundOwner playgroundOwner = new PlaygroundOwner();
-                            playgroundOwner.setName(tmpName);playgroundOwner.setPassword(tmpPassword);playgroundOwner.setEmail(tmpEmail);playgroundOwner.setPhone(tmpPhone);playgroundOwner.setLocation(tmpLocation);
-                            Account.Owners.add(playgroundOwner);
-                            currentOwner = playgroundOwner;
-                        }
-
-                        // TODO call options methods
-                    }
-                    else {
-                        incorrectCodeLabel.setText("Incorrect code, try again");
-                    }
-                }
 
             }
+            if(e.getSource()==verificationButton){
 
+                String enteredCode = codeTF.getText().toString();
+                System.out.println("this is x:"+ String.valueOf(generatedCode));
+                System.out.println("This is the codeeeeee   "+codeTF.getText().toString());
+                if(enteredCode.equals(String.valueOf(generatedCode))){
+
+                    if(accountType.equals("p")){
+                        Player player = new Player();
+                        player.setName(tmpName);player.setPassword(tmpPassword);player.setEmail(tmpEmail);player.setPhone(tmpPhone);player.setLocation(tmpLocation);player.getUserEwallet().setId(tmpID);
+                        Account.Players.add(player);
+                        currentPlayer = player;
+                        playerOptions();
+                    }
+                    else {
+                        PlaygroundOwner playgroundOwner = new PlaygroundOwner();
+                        playgroundOwner.setName(tmpName);playgroundOwner.setPassword(tmpPassword);playgroundOwner.setEmail(tmpEmail);playgroundOwner.setPhone(tmpPhone);playgroundOwner.setLocation(tmpLocation);playgroundOwner.getUserEwallet().setId(tmpID);
+                        Account.Owners.add(playgroundOwner);
+                        currentOwner = playgroundOwner;
+                        ownerOptions();
+                    }
+                    verivicationFrame.setVisible(false);
+                }
+                else {
+                    incorrectCodeLabel.setText("Incorrect code, try again");
+                }
+            }
             if(e.getSource()==showPlaygroundsButton){
                 String day = (String)DaysList.getSelectedItem();
                 if( day.equals("All") ) timeSlot = null;
