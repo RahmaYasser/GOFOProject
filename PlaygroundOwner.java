@@ -1,7 +1,7 @@
 package GOFO2;
 
 import java.util.ArrayList;
-
+import java.util.Vector;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +13,9 @@ import javax.swing.*;
 public class PlaygroundOwner extends User implements ActionListener, MouseListener{
 	
 	Playground myPlayground = new Playground();
-	private Booking[] booking;
+	public Vector<Booking> ownerBookingHistory = new Vector();
 	String request = "error";
-	String[] data = new String[20];
+	String[] slots = new String[20];
 	
 	JFrame frame = new JFrame();
 	JPanel panel = new JPanel();
@@ -32,6 +32,7 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	JLabel label7 = new JLabel("Cancellation Period");
 	JLabel addSlots = new JLabel("Add Slots");
 	JLabel viewSlots = new JLabel("View Slots");
+	JLabel logout = new JLabel("logout");
 	JLabel lmoney = new JLabel();
 	JLabel lid = new JLabel();
 	JTextField text = new JTextField();
@@ -40,7 +41,6 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	JTextField text4 = new JTextField();
 	JTextField text5 = new JTextField();
 	JTextField text6 = new JTextField();
-	JTextField text7 = new JTextField();
 	JTextField day = new JTextField();
 	JTextField from = new JTextField();
 	JTextField to = new JTextField();
@@ -102,17 +102,22 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		label.setFont (label.getFont ().deriveFont (23f));
 		label.setBounds(80, 50, 130, 50);
 		
+		logout.setForeground(Color.WHITE);
+		logout.setBounds(120, 340, 130, 50);
+		
 		frame.add(panel);
 		panel.add(button);
 		panel.add(button2);
 		panel.add(button3);
 		panel.add(button4);
 		panel.add(label);
+		panel.add(logout);
 		
 		button.addActionListener(this);
 		button2.addActionListener(this);
 		button3.addActionListener(this);
 		button4.addActionListener(this);
+		logout.addMouseListener(this);
 	}
 	
 	/**
@@ -133,14 +138,6 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		button6.setVisible(false);
 		
 		back1Details();
-		
-		text.setText("");
-		text2.setText("");
-		text3.setText("");
-		text4.setText("");
-		text5.setText("");
-		text6.setText("");
-		text7.setText("");
 		
 		panel2.add(button5);
 		button5.addActionListener(this);
@@ -197,6 +194,8 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		text4.setText(myPlayground.getDescription());
 		str = String.valueOf(myPlayground.getPricePerHour());
 		text5.setText(str);
+		str = String.valueOf(myPlayground.getCancellationPeriod());
+		text6.setText(str);
 		
 		panel2.add(button6);
 		button6.addActionListener(this);
@@ -206,8 +205,8 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 * If the admin approved the playground, the playground is stored in the array list
 	 */
 	private void approvedAddPlayground() {
-		Administrator.playground.add(myPlayground);
-		myPlayground.setId(Administrator.playground.size());
+		AvailablePlaygrounds.playgrounds.add(myPlayground);
+		myPlayground.setId(AvailablePlaygrounds.playgrounds.size());
 	}
 	
 	/**
@@ -215,7 +214,7 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 */
 	private void approvedUpdatePlayground() {
 		int index = myPlayground.getId();
-		Administrator.playground.get(index-1).equals(myPlayground);
+		AvailablePlaygrounds.playgrounds.get(index-1).equals(myPlayground);
 	}
 	
 	/**
@@ -325,6 +324,8 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		from.setBounds(100, 150, 80, 30);
 		to.setBounds(100, 190, 80, 30);
 			
+		addSlots.setBounds(110, 300, 120, 20);
+		
 		frame.add(panel3);
 		panel3.add(label);
 		panel3.add(label2);
@@ -334,7 +335,9 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		panel3.add(day);
 		panel3.add(from);
 		panel3.add(to);
+		panel3.add(addSlots);
 		
+		addSlots.addMouseListener(this);
 		done.addActionListener(this);
 	}
 	
@@ -343,7 +346,7 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 			TimeSlot slot = new TimeSlot();
 			slot.setDay(day.getText());
 			slot.setEndTime(Integer.parseInt(to.getText()));
-			myPlayground.timeSlots.add(slot);
+			myPlayground.timeSlot.add(slot);
 		}
 	}
 	
@@ -357,7 +360,7 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		panel4.setBackground(Color.DARK_GRAY);
 		panel4.setLayout(null);
 		
-		JList list = new JList(data);
+		JList list = new JList(slots);
 		
 		list.setBackground(Color.WHITE);
 		list.setForeground(Color.black);
@@ -378,11 +381,9 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	 * This function to store bookings slots into 'data' array
 	 */
 	private void storePlaygroundsTitle() {
-		for (int i = 0 ; i < booking.length ; i++) {
-			if (booking[i].item.name == myPlayground.getName()) {
-				data[i] = String.valueOf(i+1) + ") " + String.valueOf(booking[i].item.timeSlot.getStartTime()) + "-"
-						+ String.valueOf(booking[i].item.timeSlot.getEndTime());
-			}
+		for (int i = 0 ; i < ownerBookingHistory.size() ; i++) {
+			slots[i] = "From " + String.valueOf(ownerBookingHistory.get(i).item.timeSlot.getStartTime()) + " to "
+					+ String.valueOf(ownerBookingHistory.get(i).item.timeSlot.getEndTime());
 		}
 	}
 	
@@ -438,10 +439,14 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == button) {
-			toAddPlayground();
+			if (myPlayground.getId() == 0) {
+				toAddPlayground();
+			}
 		}
 		if (e.getSource() == button2) {
-			updatePlayground();
+			if (myPlayground.getId() != 0) {
+				updatePlayground();
+			}
 		}
 		if (e.getSource() == button3) {
 			viewBookings();
@@ -476,6 +481,9 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 			storeSlots();
 			addSlotsFrame();
 		}
+		if (e.getSource() == logout) {
+			//login()
+		}
 	}
 
 	@Override
@@ -502,4 +510,6 @@ public class PlaygroundOwner extends User implements ActionListener, MouseListen
 		
 	}
 }
+
+
 
