@@ -3,9 +3,9 @@ package GOFO2;
 
 
 
-import javax.mail.*;
+/*import javax.mail.*;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage;*/
 import javax.management.Notification;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -26,7 +26,7 @@ public class GUI extends JFrame implements MouseListener{
     private Border orangeBorder = BorderFactory.createLineBorder(new Color(255,134,0),2);
     private JTextField UserEmailTF,registerNameTF,registerEmailTF,registerPhoneTF,registerLocationTF,codeTF,registerIDTF,playerEmailTF;
     private JPasswordField UserPF,registerPF;
-    private JLabel NotificationLabel;
+    private JLabel NotificationLabel,Logout2;
     private JLabel emailLabel,PasswordLabel, returnToOptions3,returnToOptions, calcellationPeriodLabel,enterPlayerEmailLabel,teamFormationMsgLabel;
     private JLabel NewUserLabel,SignUpLabel,registerNameLabel,registerEmailLabel,registerPasswordLabel,registerPhoneLabel;
     private JLabel registerLocationLabel, errorInSignInLabel,errorInSignUpLabel,incorrectCodeLabel,verificationLabel,eWalletLabel;
@@ -46,47 +46,91 @@ public class GUI extends JFrame implements MouseListener{
     private String notification;
     private String tmpName="",tmpEmail="",tmpPassword="",tmpLocation="",tmpPhone="",tmpID="";
 
-    JFrame frame;
-    JFrame frame2;
-    JFrame frame3;
-    JFrame frame4;
-    JFrame frame5;
-    JPanel ownerHome = new JPanel();
-    JPanel addUpdatePanel = new JPanel();
-    JPanel slotsPanel = new JPanel();
-    JPanel vBookingPanel = new JPanel();
-    JPanel eWalletPanel = new JPanel();
-    JLabel header = new JLabel();
-    JLabel PgNameLabel = new JLabel("Name");
-    JLabel locationLabel = new JLabel("Location");
-    JLabel sizeLabel = new JLabel("Size");
-    JLabel descriptionLabel = new JLabel("Description");
-    JLabel priceLabel = new JLabel("Price Per Hour");
-    JLabel cancellationLabel = new JLabel("Cancellation Period");
-    JLabel addSlots = new JLabel("Add Slots");
-    JLabel viewSlots = new JLabel("View Slots");
-    //JLabel logout = new JLabel("logout");
-    JLabel lmoney = new JLabel();
-    JLabel lid = new JLabel();
-    JTextField nameText = new JTextField();
-    JTextField locationText = new JTextField();
-    JTextField sizeText = new JTextField();
-    JTextField descriptionText = new JTextField();
-    JTextField priceText = new JTextField();
-    JTextField cancellationText = new JTextField();
-    JTextField day = new JTextField();
-    JTextField from = new JTextField();
-    JTextField to = new JTextField();
-    JButton addPgButton = new JButton("Add Playground");
-    JButton updatePgButton = new JButton("Update Playground");
-    JButton vBookingButton = new JButton("View Bookings");
-    JButton eWalletButton = new JButton("Status & eWallet");
-    JButton addPlaygroundButton = new JButton("Add");
-    JButton updateButton = new JButton("Update");
-    JButton done = new JButton("Done");
-    JButton ownerBack1 = new JButton("<<");
+    JFrame frame, addPgFrame, updateFrame, slotsFrame, bookingFrame, eWalletFrame;
+    JPanel ownerHome, addUpdatePanel, slotsPanel, vBookingPanel, eWalletPanel;
+    JLabel header, addHeader, updateHeader, bookingHeader, eWalletHeader, slotsHeader;
+    JLabel PgNameLabel, locationLabel, sizeLabel, descriptionLabel, priceLabel, cancellationLabel, addSlots;
+    JLabel lmoney, lid, dayLabel, fromLabel, toLabel;
+    JTextField nameText, locationText, sizeText, descriptionText,priceText, cancellationText;
+    JTextField dayText, fromText, toText;
+    JButton addPgButton, updatePgButton, vBookingButton, eWalletButton = new JButton("Status & eWallet");
+    JButton addPlaygroundButton, updateButton, done;
+    JButton addBack, updateBack, bookingBack, eWalletBack;
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(e.getSource() == UserEmailTF) UserEmailTF.setBorder(border);
+        if(e.getSource() == registerNameTF)registerNameTF.setBorder(border);
+        if(e.getSource() == registerEmailTF)registerEmailTF.setBorder(border);
+        if(e.getSource() == registerPhoneTF)registerPhoneTF.setBorder(border);
+        if(e.getSource() == registerLocationTF)registerLocationTF.setBorder(border);
+        if(e.getSource() == UserPF)UserPF.setBorder(border);
+        if(e.getSource() == registerPF)registerPF.setBorder(border);
+        if(e.getSource() == SignUpLabel) {
+            registerPage();
+            setVisible(false);
+        }
+        if(e.getSource() == playerOptionsLabelOne) PlayerOptionOne();
+        //if(e.getSource() == playerOptionsLabelTwo) PlayerOptionTwo();
+        //if(e.getSource() == playerOptionsLabelthree);PlayerOptionThree();
+        //if(e.getSource() == playerOptionsLabelFour) PlayerOptionFour();
+        if(e.getSource() == returnToOptions) {
+            jFrame1.setVisible(false);
+            playerOptions();
+        }
+        if(e.getSource() == returnToOptions2){
+            playerOptions();
+        }
+        if(e.getSource() == returnToOptions3) {
+            playerOptions();
+        }
+        if(e.getSource() == Logout){
+            currentPlayer = null;
+            currentOwner = null;
+            LoginPage();
+        }
+        if(e.getSource() == Logout2){
+        	System.out.println("log");
+            currentPlayer = null;
+            currentOwner = null;
+            frame.setVisible(false);
+            LoginPage();
+        }
+        if (e.getSource() == addSlots) {
+            addSlotsFrame();
+        }
 
 
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        if(e.getSource() == UserEmailTF) UserEmailTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        if(e.getSource() == registerNameTF)registerNameTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        if(e.getSource() == registerEmailTF)registerEmailTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        if(e.getSource() == registerPhoneTF)registerPhoneTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        if(e.getSource() == registerLocationTF)registerLocationTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        if(e.getSource() == UserPF)UserPF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        if(e.getSource() == registerPF)registerPF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+
+
+
+    }
 
     ActionInterface obj = new ActionInterface();
 
@@ -95,21 +139,28 @@ public class GUI extends JFrame implements MouseListener{
      * This function builds the welcome page of the playground owner
      */
     private void ownerOptions() {
-    	frame = new JFrame();
-        ownerHome.setVisible(true);
-        addUpdatePanel.setVisible(false);
-        slotsPanel.setVisible(false);
-        vBookingPanel.setVisible(false);
-        eWalletPanel.setVisible(false);
-
+        frame = new JFrame();
         frame.setTitle("GoFo");
         frame.setSize(300, 450);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocation(650, 200);
+        
+        ownerHome = new JPanel();
+        ownerHome.setVisible(true);
         ownerHome.setLayout(null);
         ownerHome.setBackground(new java.awt.Color(105,105,105));
+        
+        header = new JLabel("WELCOME");
+        header.setForeground(Color.WHITE);
+        header.setFont (header.getFont ().deriveFont (23f));
+        header.setBounds(80, 50, 130, 50);
+        
+        addPgButton = new JButton("Add Playground");
+        updatePgButton = new JButton("Update Playground");
+        vBookingButton = new JButton("View Bookings");
+        eWalletButton = new JButton("Status & eWallet");
 
         addPgButton.setBackground(new Color(255,134,0));
         addPgButton.setForeground(Color.white);
@@ -131,16 +182,13 @@ public class GUI extends JFrame implements MouseListener{
         eWalletButton.setBounds(160, 270, 110, 50);
         eWalletButton.setFont (header.getFont ().deriveFont (9f));
 
+        Logout2 = new JLabel("logout");
+        Logout2.setBounds(120, 340, 130, 50);
+        Logout2.setBackground(new java.awt.Color(105,105,105));
+        Logout2.setForeground(Color.white);
+        Logout2.setFont(new Font("Serif", Font.ROMAN_BASELINE, 17));
+        Logout2.addMouseListener(this);
 
-        header.setForeground(Color.WHITE);
-        header.setText("WELCOME");
-        header.setFont (header.getFont ().deriveFont (23f));
-        header.setBounds(80, 50, 130, 50);
-
-        Logout=new JLabel("logout");
-        Logout.setForeground(Color.WHITE);
-        Logout.setBounds(120, 340, 130, 50);
-        Logout.addMouseListener(this);
 
         frame.add(ownerHome);
         ownerHome.add(addPgButton);
@@ -148,7 +196,7 @@ public class GUI extends JFrame implements MouseListener{
         ownerHome.add(vBookingButton);
         ownerHome.add(eWalletButton);
         ownerHome.add(header);
-        ownerHome.add(Logout);
+        ownerHome.add(Logout2);
 
         addPgButton.addActionListener(obj);
         updatePgButton.addActionListener(obj);
@@ -162,20 +210,39 @@ public class GUI extends JFrame implements MouseListener{
      */
     private void toAddPlayground() {
 
-        formDetails();
+    	addPgFrame = new JFrame();
+    	addPgFrame.setTitle("GoFo");
+    	addPgFrame.setSize(300, 450);
+    	addPgFrame.setVisible(true);
+    	addPgFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	addPgFrame.setResizable(false);
+    	addPgFrame.setLocation(650, 200);
+        
+    	formDetails();
 
-        header.setText("Add Playground");
-        header.setBounds(50, 30, 180, 50);
+        addHeader = new JLabel("Add Playground");
+        addHeader.setBounds(50, 30, 180, 50);
+        addHeader.setForeground(Color.WHITE);
+        addHeader.setFont (addHeader.getFont ().deriveFont (23f));
 
+        addPlaygroundButton = new JButton("Add");
         addPlaygroundButton.setBackground(new Color(255,134,0));
         addPlaygroundButton.setForeground(Color.WHITE);
         addPlaygroundButton.setBounds(100, 375, 80, 30);
         addPlaygroundButton.setVisible(true);
-        updateButton.setVisible(false);
 
-        ownerBack1Details();
+        addBack = new JButton("<<");
+        addBack.setBounds(5, 5, 50, 30);
+        addBack.setFont (addBack.getFont ().deriveFont (10f));
+        addBack.setBackground(new Color(255,134,0));
+        addBack.setForeground(Color.white);
+        addBack.addActionListener(obj);
 
+        addPgFrame.add(addUpdatePanel);
         addUpdatePanel.add(addPlaygroundButton);
+        addUpdatePanel.add(addHeader);
+        addUpdatePanel.add(addBack);
+        
         addPlaygroundButton.addActionListener(obj);
     }
 
@@ -208,18 +275,33 @@ public class GUI extends JFrame implements MouseListener{
      */
     public void updatePlayground() {
 
+    	updateFrame = new JFrame();
+    	updateFrame.setTitle("GoFo");
+    	updateFrame.setSize(300, 450);
+    	updateFrame.setVisible(true);
+    	updateFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	updateFrame.setResizable(false);
+    	updateFrame.setLocation(650, 200);
+    	
         formDetails();
 
-        header.setText("Update Playground");
-        header.setBounds(30, 25, 220, 50);
+        updateHeader = new JLabel("Update Playground");
+        updateHeader.setForeground(Color.WHITE);
+        updateHeader.setBounds(30, 25, 220, 50);
 
+        updateButton = new JButton("Update");
         updateButton.setBackground(new Color(255,134,0));
         updateButton.setForeground(Color.WHITE);
         updateButton.setBounds(100, 375, 80, 30);
         updateButton.setVisible(true);
         addPlaygroundButton.setVisible(false);
 
-        ownerBack1Details();
+        updateBack = new JButton("<<");
+        updateBack.setBounds(5, 5, 50, 30);
+        updateBack.setFont (updateBack.getFont ().deriveFont (10f));
+        updateBack.setBackground(new Color(255,134,0));
+        updateBack.setForeground(Color.white);
+        updateBack.addActionListener(obj);
 
         String str;
 
@@ -233,7 +315,11 @@ public class GUI extends JFrame implements MouseListener{
         str = String.valueOf(currentOwner.myPlayground.getCancellationPeriod());
         cancellationText.setText(str);
 
+        updateFrame.add(addUpdatePanel);
         addUpdatePanel.add(updateButton);
+        addUpdatePanel.add(updateHeader);
+        addUpdatePanel.add(updateBack);
+        
         updateButton.addActionListener(obj);
     }
 
@@ -257,20 +343,21 @@ public class GUI extends JFrame implements MouseListener{
      * To build the window of the add playground button and update playground button.
      */
     private void formDetails() {
-    	frame2 = new JFrame();
-    	frame2.setTitle("GoFo");
-        frame2.setSize(300, 450);
-        frame2.setVisible(true);
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.setResizable(false);
-        frame2.setLocation(650, 200);
         
-        ownerHome.setVisible(false);
-        slotsPanel.setVisible(false);
+
+        addUpdatePanel = new JPanel();
         addUpdatePanel.setVisible(true);
         addUpdatePanel.setBackground(new java.awt.Color(105,105,105));
         addUpdatePanel.setLayout(null);
 
+        PgNameLabel = new JLabel("Name");
+        locationLabel = new JLabel("Location");
+        sizeLabel = new JLabel("Size");
+        descriptionLabel = new JLabel("Description");
+        priceLabel = new JLabel("Price Per Hour");
+        cancellationLabel = new JLabel("Cancellation Period");
+        addSlots = new JLabel("Add Slots");
+        
         PgNameLabel.setText("Name");
         PgNameLabel.setBounds(40, 70, 80, 20);
         PgNameLabel.setFont (PgNameLabel.getFont ().deriveFont (10f));
@@ -305,6 +392,13 @@ public class GUI extends JFrame implements MouseListener{
         addSlots.setFont (addSlots.getFont ().deriveFont (13f));
         addSlots.setForeground(Color.WHITE);
 
+        nameText = new JTextField();
+        locationText = new JTextField();
+        sizeText = new JTextField();
+        descriptionText = new JTextField();
+        priceText = new JTextField();
+        cancellationText = new JTextField();
+        
         nameText.setBounds(40, 90, 200, 20);
         locationText.setBounds(40, 130, 200, 20);
         sizeText.setBounds(40, 170, 200, 20);
@@ -312,9 +406,6 @@ public class GUI extends JFrame implements MouseListener{
         priceText.setBounds(40, 250, 200, 20);
         cancellationText.setBounds(40, 290, 200, 20);
 
-        frame2.add(addUpdatePanel);
-        addUpdatePanel.add(ownerBack1);
-        addUpdatePanel.add(header);
         addUpdatePanel.add(PgNameLabel);
         addUpdatePanel.add(locationLabel);
         addUpdatePanel.add(sizeLabel);
@@ -333,71 +424,71 @@ public class GUI extends JFrame implements MouseListener{
     }
 
     public void addSlotsFrame() {
-    	frame3 = new JFrame();
-    	frame3.setTitle("GoFo");
-        frame3.setSize(300, 450);
-        frame3.setVisible(true);
-        frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame3.setResizable(false);
-        frame3.setLocation(650, 200);
-        
-        addUpdatePanel.setVisible(false);
+        slotsFrame = new JFrame();
+        slotsFrame.setTitle("GoFo");
+        slotsFrame.setSize(300, 450);
+        slotsFrame.setVisible(true);
+        slotsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        slotsFrame.setResizable(false);
+        slotsFrame.setLocation(650, 200);
+
+        slotsPanel = new JPanel();
         slotsPanel.setVisible(true);
         slotsPanel.setBackground(new java.awt.Color(105,105,105));
         slotsPanel.setLayout(null);
 
-        header.setText("Add Slots");
-        header.setBounds(80, 25, 220, 50);
+        slotsHeader = new JLabel("Add Slots");
+        slotsHeader.setBounds(90, 25, 220, 50);
+        slotsHeader.setForeground(Color.WHITE);
+        slotsHeader.setFont (slotsHeader.getFont ().deriveFont (15f));
 
-        PgNameLabel.setText("Day");
-        PgNameLabel.setBounds(60, 110, 80, 30);
-        PgNameLabel.setFont (PgNameLabel.getFont ().deriveFont (12f));
-        PgNameLabel.setForeground(Color.WHITE);
+        dayLabel = new JLabel("Day");
+        dayLabel.setBounds(60, 110, 80, 30);
+        dayLabel.setFont (dayLabel.getFont ().deriveFont (12f));
+        dayLabel.setForeground(Color.WHITE);
 
-        locationLabel.setText("From");
-        locationLabel.setBounds(60, 150, 80, 30);
-        locationLabel.setFont (locationLabel.getFont ().deriveFont (12f));
-        locationLabel.setForeground(Color.WHITE);
+        fromLabel = new JLabel("From");
+        fromLabel.setBounds(60, 150, 80, 30);
+        fromLabel.setFont (fromLabel.getFont ().deriveFont (12f));
+        fromLabel.setForeground(Color.WHITE);
 
-        sizeLabel.setText("To");
-        sizeLabel.setBounds(60, 190, 80, 30);
-        sizeLabel.setFont (sizeLabel.getFont ().deriveFont (12f));
-        sizeLabel.setForeground(Color.WHITE);
+        toLabel= new JLabel("To");
+        toLabel.setBounds(60, 190, 80, 30);
+        toLabel.setFont (toLabel.getFont ().deriveFont (12f));
+        toLabel.setForeground(Color.WHITE);
 
+        done = new JButton("Done");
         done.setBackground(new Color(255,134,0));
         done.setForeground(Color.WHITE);
         done.setBounds(100, 340, 80, 30);
 
-        day.setText("");
-        from.setText("");
-        to.setText("");
+        dayText = new JTextField();
+        fromText = new JTextField();
+        toText = new JTextField();
 
-        day.setBounds(100, 110, 80, 30);
-        from.setBounds(100, 150, 80, 30);
-        to.setBounds(100, 190, 80, 30);
+        dayText.setBounds(100, 110, 80, 30);
+        fromText.setBounds(100, 150, 80, 30);
+        toText.setBounds(100, 190, 80, 30);
 
-        addSlots.setBounds(110, 300, 120, 20);
-
-        frame3.add(slotsPanel);
-        slotsPanel.add(header);
-        slotsPanel.add(PgNameLabel);
-        slotsPanel.add(locationLabel);
-        slotsPanel.add(sizeLabel);
+        slotsFrame.add(slotsPanel);
+        slotsPanel.add(slotsHeader);
+        slotsPanel.add(dayLabel);
+        slotsPanel.add(fromLabel);
+        slotsPanel.add(toLabel);
         slotsPanel.add(done);
-        slotsPanel.add(day);
-        slotsPanel.add(from);
-        slotsPanel.add(to);
-        slotsPanel.add(addSlots);
+        slotsPanel.add(dayText);
+        slotsPanel.add(fromText);
+        slotsPanel.add(toText);
 
-        addSlots.addMouseListener(this);
         done.addActionListener(obj);
     }
 
     public void storeSlots() {
-        if (!day.getText().contentEquals("") && !from.getText().contentEquals("") && !to.getText().contentEquals("")) {
+        if (!dayText.getText().contentEquals("") && !fromText.getText().contentEquals("") && !toText.getText().contentEquals("")) {
             TimeSlot slot = new TimeSlot();
-            slot.setDay(day.getText());
-            slot.setEndTime(Integer.parseInt(to.getText()));
+            slot.setDay(dayText.getText());
+            slot.setStartTime(Integer.parseInt(fromText.getText()));
+            slot.setEndTime(Integer.parseInt(toText.getText()));
             currentOwner.myPlayground.timeSlot.add(slot);
         }
     }
@@ -407,15 +498,14 @@ public class GUI extends JFrame implements MouseListener{
      * and it displays the bookings of the owner playground.
      */
     public void viewBookings() {
-    	frame4 = new JFrame();
-    	frame4.setTitle("GoFo");
-        frame4.setSize(300, 450);
-        frame4.setVisible(true);
-        frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame4.setResizable(false);
-        frame4.setLocation(650, 200);
-        
-        ownerHome.setVisible(false);
+        bookingFrame = new JFrame();
+        bookingFrame.setTitle("GoFo");
+        bookingFrame.setSize(300, 450);
+        bookingFrame.setVisible(true);
+        bookingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        bookingFrame.setLocation(650, 200);
+
+        vBookingPanel = new JPanel();
         vBookingPanel.setVisible(true);
         vBookingPanel.setBackground(new java.awt.Color(105,105,105));
         vBookingPanel.setLayout(null);
@@ -447,25 +537,37 @@ public class GUI extends JFrame implements MouseListener{
         list.setBounds(40, 130, 200, 200);
         MyCellRenderer cellRenderer = new MyCellRenderer(200);
         list.setCellRenderer(cellRenderer);
-        header.setText("Bookings");
-        header.setBounds(100, 50, 180, 50);
+        
+        bookingHeader = new JLabel("Bookings");
+        bookingHeader.setBounds(100, 50, 180, 50);
+        bookingHeader.setForeground(Color.WHITE);
 
-        ownerBack1Details();
+        bookingBack = new JButton("<<");
+        bookingBack.setBounds(5, 5, 50, 30);
+        bookingBack.setFont (bookingBack.getFont ().deriveFont (10f));
+        bookingBack.setBackground(new Color(255,134,0));
+        bookingBack.setForeground(Color.white);
+        bookingBack.addActionListener(obj);
 
-        frame4.add(vBookingPanel);
-        vBookingPanel.add(ownerBack1);
+        bookingFrame.add(vBookingPanel);
+        vBookingPanel.add(bookingBack);
         vBookingPanel.add(list);
-        vBookingPanel.add(header);
+        vBookingPanel.add(bookingHeader);
     }
 
     /**
      * This function to store bookings slots into 'data' array
      */
-    private void storePlaygroundsTitle() {
+    private void storeSlotsTitle() {
         currentOwner.slots.clear();
-        for (int i = 0 ; i < currentOwner.bookingHistory.size() ; i++) {
+        /*for (int i = 0 ; i < currentOwner.bookingHistory.size() ; i++) {
             currentOwner.slots.add(currentOwner.bookingHistory.get(i).item.timeSlot.getDay() + "From " + String.valueOf(currentOwner.bookingHistory.get(i).item.timeSlot.getStartTime()) + " to "
                     + String.valueOf(currentOwner.bookingHistory.get(i).item.timeSlot.getEndTime()));
+        }*/
+        System.out.println("slots title");
+        for (int i = 0 ; i < currentOwner.myPlayground.timeSlot.size() ; i++) {
+            currentOwner.slots.add(currentOwner.myPlayground.timeSlot.get(i).getDay() + ", From " + String.valueOf(currentOwner.myPlayground.timeSlot.get(i).getStartTime()) + " to "
+                    + String.valueOf(currentOwner.myPlayground.timeSlot.get(i).getEndTime()));
         }
     }
 
@@ -474,22 +576,26 @@ public class GUI extends JFrame implements MouseListener{
      * and it displays the statue of the owner eWallet.
      */
     public void checkEwallet() {
-    	frame5 = new JFrame();
-    	frame5.setTitle("GoFo");
-        frame5.setSize(300, 450);
-        frame5.setVisible(true);
-        frame5.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame5.setResizable(false);
-        frame5.setLocation(650, 200);
-        
-        ownerHome.setVisible(false);
+        eWalletFrame = new JFrame();
+        eWalletFrame.setTitle("GoFo");
+        eWalletFrame.setSize(300, 450);
+        eWalletFrame.setVisible(true);
+        eWalletFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        eWalletFrame.setResizable(false);
+        eWalletFrame.setLocation(650, 200);
+
+        eWalletPanel = new JPanel();
         eWalletPanel.setVisible(true);
         eWalletPanel.setBackground(new java.awt.Color(105,105,105));
         eWalletPanel.setLayout(null);
 
-        header.setText("eWallet");
+        eWalletHeader = new JLabel("eWallet");
+        eWalletHeader.setForeground(Color.WHITE);
+        eWalletHeader.setBounds(80, 50, 130, 50);
 
         String str;
+        lmoney = new JLabel();
+        lid = new JLabel();
 
         str = "Your Money: " + String.valueOf(currentOwner.getUserEwallet().getCurrentMoney());
         lmoney.setText(str);
@@ -502,24 +608,18 @@ public class GUI extends JFrame implements MouseListener{
         lmoney.setForeground(Color.WHITE);
         lid.setForeground(Color.WHITE);
 
-        ownerBack1Details();
+        eWalletBack = new JButton("<<");
+        eWalletBack.setBounds(5, 5, 50, 30);
+        eWalletBack.setFont (eWalletBack.getFont ().deriveFont (10f));
+        eWalletBack.setBackground(new Color(255,134,0));
+        eWalletBack.setForeground(Color.white);
+        eWalletBack.addActionListener(obj);
 
-        frame5.add(eWalletPanel);
-        eWalletPanel.add(header);
+        eWalletFrame.add(eWalletPanel);
+        eWalletPanel.add(eWalletHeader);
         eWalletPanel.add(lmoney);
         eWalletPanel.add(lid);
-        eWalletPanel.add(ownerBack1);
-    }
-
-    /**
-     * To set back details(color, font, ...)
-     */
-    private void ownerBack1Details() {
-        ownerBack1.setBounds(5, 5, 50, 30);
-        ownerBack1.setFont (ownerBack1.getFont ().deriveFont (10f));
-        ownerBack1.setBackground(new Color(255,134,0));
-        ownerBack1.setForeground(Color.white);
-        ownerBack1.addActionListener(obj);
+        eWalletPanel.add(eWalletBack);
     }
 
 
@@ -583,7 +683,7 @@ public class GUI extends JFrame implements MouseListener{
     private boolean isValid(String email)
     {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                "[a-zA-Z0-9_+&*-]+)*@" +
+                "[a-zA-Z0-9_+&-]+)@" +
                 "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
                 "A-Z]{2,7}$";
 
@@ -598,74 +698,7 @@ public class GUI extends JFrame implements MouseListener{
     public GUI() {
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if(e.getSource() == UserEmailTF) UserEmailTF.setBorder(border);
-        if(e.getSource() == registerNameTF)registerNameTF.setBorder(border);
-        if(e.getSource() == registerEmailTF)registerEmailTF.setBorder(border);
-        if(e.getSource() == registerPhoneTF)registerPhoneTF.setBorder(border);
-        if(e.getSource() == registerLocationTF)registerLocationTF.setBorder(border);
-        if(e.getSource() == UserPF)UserPF.setBorder(border);
-        if(e.getSource() == registerPF)registerPF.setBorder(border);
-        if(e.getSource() == SignUpLabel) {
-            registerPage();
-            setVisible(false);
-        }
-        //if(e.getSource() == playerOptionsLabelOne) PlayerOptionOne();
-        //if(e.getSource() == playerOptionsLabelTwo) PlayerOptionTwo();
-        //if(e.getSource() == playerOptionsLabelthree);PlayerOptionThree();
-        //if(e.getSource() == playerOptionsLabelFour) PlayerOptionFour();
-        if(e.getSource() == returnToOptions) {
-            jFrame1.setVisible(false);
-            playerOptions();
-        }
-        if(e.getSource() == returnToOptions2){
-            playerOptions();
-        }
-        if(e.getSource() == returnToOptions3) {
-            playerOptions();
-        }
-        if(e.getSource() == Logout){
-            currentPlayer = null;
-            currentOwner = null;
-            LoginPage();
-        }
-        if (e.getSource() == addSlots) {
-            storeSlots();
-            addSlotsFrame();
-        }
 
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        if(e.getSource() == UserEmailTF) UserEmailTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        if(e.getSource() == registerNameTF)registerNameTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        if(e.getSource() == registerEmailTF)registerEmailTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        if(e.getSource() == registerPhoneTF)registerPhoneTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        if(e.getSource() == registerLocationTF)registerLocationTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        if(e.getSource() == UserPF)UserPF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        if(e.getSource() == registerPF)registerPF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-
-
-
-    }
 
 
     public void playerOptions(){
@@ -734,7 +767,6 @@ public class GUI extends JFrame implements MouseListener{
         jFrame.add(welcomePlayer);jFrame.add(playerOptionsLabelOne);jFrame.add(playerOptionsLabelTwo);
         jFrame.add(playerOptionsLabelthree);jFrame.add(playerOptionsLabelFour);jFrame.add(Logout);
     }
-
     public void LoginPage(){
         //TODO show options
         loginFrame = new JFrame();
@@ -1007,7 +1039,7 @@ public class GUI extends JFrame implements MouseListener{
         verivicationFrame.add(verificationButton);verivicationFrame.add(incorrectCodeLabel);
         verivicationFrame.add(verificationLabel);
     }
-   /* public void PlayerOptionOne(){
+    public void PlayerOptionOne(){
         timeSlot = new TimeSlot();
         jFrameShowPlayGround = new JFrame();
         jFrameShowPlayGround.setResizable(false);
@@ -1043,10 +1075,10 @@ public class GUI extends JFrame implements MouseListener{
         showPlaygroundsButton.addActionListener(obj);
         jFrameShowPlayGround.add(startTimeList);jFrameShowPlayGround.add(endTimeList);jFrameShowPlayGround.add(DaysList);
         jFrameShowPlayGround.add(selectTimeIntervalLabel);jFrameShowPlayGround.add(showPlaygroundsButton);
-    }*/
+    }
 
 
-    /*public void PlayerOptionTwo(){
+    public void PlayerOptionTwo(){
         jFrame1 = new JFrame();
         jFrame1.setTitle("");
         jFrame1.setResizable(false);
@@ -1087,9 +1119,9 @@ public class GUI extends JFrame implements MouseListener{
         returnToOptions.addMouseListener(this);
         jFrame1.add(scrollPane2);
         jFrame1.add(returnToOptions);
-    }*/
+    }
 
-    /*public void PlayerOptionThree(){
+    public void PlayerOptionThree(){
         JFrame jFrame = new JFrame();
         jFrame.setTitle("");
         jFrame.setResizable(false);
@@ -1127,9 +1159,9 @@ public class GUI extends JFrame implements MouseListener{
         returnToOptions3.addMouseListener(this);
         jFrame.add(enterPlayerEmailLabel);jFrame.add(playerEmailTF);jFrame.add(addButton);jFrame.add(teamFormationMsgLabel);
         jFrame.add(returnToOptions3);
-    }*/
+    }
 
-    /*public void PlayerOptionFour(){
+    public void PlayerOptionFour(){
         JFrame jFrame = new JFrame();
         jFrame.setTitle("");
         jFrame.setResizable(false);
@@ -1146,7 +1178,7 @@ public class GUI extends JFrame implements MouseListener{
         NotificationLabel.setForeground(Color.white);
         NotificationLabel.setBorder(border);
         jFrame.add(NotificationLabel);
-    }*/
+    }
     public void showBookingInfo(Booking booking,PlaygroundOwner playgroundOwner){
         JFrame jFrame = new JFrame();
         jFrame.setResizable(false);
@@ -1179,7 +1211,7 @@ public class GUI extends JFrame implements MouseListener{
 
 
 
-        booking.timer = new Timer(1000, new ActionListener() {
+        /*booking.timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 booking.seconds--;
@@ -1197,7 +1229,7 @@ public class GUI extends JFrame implements MouseListener{
                 }
 
             }
-        });
+        });*/
         booking.timer.start();
 
 
@@ -1227,21 +1259,27 @@ public class GUI extends JFrame implements MouseListener{
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == addPgButton) {
                 if (currentOwner.myPlayground.getId() == 0) {
+                	frame.dispose();
                     toAddPlayground();
                 }
             }
             if (e.getSource() == updatePgButton) {
                 if (currentOwner.myPlayground.getId() != 0) {
+                	frame.dispose();
                     updatePlayground();
                 }
             }
             if (e.getSource() == vBookingButton) {
+            	frame.dispose();
+            	storeSlotsTitle();
                 viewBookings();
             }
             if (e.getSource() == eWalletButton) {
+            	frame.dispose();
                 checkEwallet();
             }
             if (e.getSource() == addPlaygroundButton) {
+            	addPgFrame.dispose();
                 getPlaygroundData();
                 ownerOptions();
                 if (Administrator.approvePlayground(currentOwner.request)) {
@@ -1249,6 +1287,7 @@ public class GUI extends JFrame implements MouseListener{
                 }
             }
             if (e.getSource() == updateButton) {
+            	updateFrame.dispose();
                 getPlaygroundData();
                 ownerOptions();
                 if (Administrator.approvePlayground(currentOwner.request)) {
@@ -1256,10 +1295,24 @@ public class GUI extends JFrame implements MouseListener{
                 }
             }
             if (e.getSource() == done) {
-                toAddPlayground();
+            	storeSlots();
+            	slotsFrame.dispose();
             }
-            if (e.getSource() == ownerBack1) {
+            if (e.getSource() == addBack) {
+            	addPgFrame.dispose();
                 ownerOptions();
+            }
+            if (e.getSource() == updateBack) {
+            	updateFrame.dispose();
+            	ownerOptions();
+            }
+            if (e.getSource() == bookingBack) {
+            	bookingFrame.dispose();
+            	ownerOptions();
+            }
+            if (e.getSource() == eWalletBack) {
+            	eWalletFrame.dispose();
+            	ownerOptions();
             }
             if(e.getSource() == addButton){
                 String mail = playerEmailTF.getText().toString();
@@ -1267,8 +1320,8 @@ public class GUI extends JFrame implements MouseListener{
                 for(Player player:Account.Players){
                     if(player.getEmail().equals(mail)){
                         found=true;
-                        currentPlayer.team = new Team();
-                        currentPlayer.team.teamList.add(player);
+                        //currentPlayer.team = new Team();
+                        //currentPlayer.team.teamList.add(player);
                         teamFormationMsgLabel.setText("Added successfully");
                         break;
                     }
@@ -1297,10 +1350,10 @@ public class GUI extends JFrame implements MouseListener{
                     AvailablePlaygrounds.playgrounds.get(booking.item.i).Available[booking.item.j] = false;
                 }
 
-                for(Player player:currentPlayer.team.teamList){
+                /*for(Player player:currentPlayer.team.teamList){
                     notification = currentPlayer.getName()+"Invites you to play\n playground info: "+booking.item.toString();
                     player.setNotification(notification);
-                }
+                }*/
 
             }
             if(e.getSource() == LoginButton) {
@@ -1313,8 +1366,8 @@ public class GUI extends JFrame implements MouseListener{
                     if(player1.getEmail().equals(email) && player1.getPassword().equals(password)){
                         currentPlayer = player1;
                         playerOptions();
-                        loginFrame.setVisible(false);
                         errorInSignInLabel.setText("");
+                        loginFrame.setVisible(false);
                         return;
                     }
                 }
@@ -1326,8 +1379,8 @@ public class GUI extends JFrame implements MouseListener{
                     if(playgroundOwner1.getEmail().equals(email) && playgroundOwner1.getPassword().equals(password)){
                         currentOwner = playgroundOwner1;
                         ownerOptions();
-                        loginFrame.setVisible(false);
                         errorInSignInLabel.setText("");
+                        loginFrame.setVisible(false);
                         return;
                     }
                 }
@@ -1351,7 +1404,7 @@ public class GUI extends JFrame implements MouseListener{
                 if(tmpEmail.equals("")|| tmpLocation.equals("")||tmpName.equals("")||tmpPassword.equals("")||tmpPhone.equals("") || accountType.equals("") || tmpID.equals("")) errorInSignUpLabel.setText("Please enter all sections");
                 else if(isValid(tmpEmail)){
                     generatedCode = (int) (Math.random() * (89467892 - 34278564 + 1)) + 34278564;
-                   // mail(tmpEmail,String.valueOf(generatedCode),tmpName);
+                    // mail(tmpEmail,String.valueOf(generatedCode),tmpName);
                     System.out.println(generatedCode);
                     registerFrame.setVisible(false);
                     verificationCodePage();
