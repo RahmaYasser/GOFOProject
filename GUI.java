@@ -2,7 +2,9 @@ package GOFO2;
 /*import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;*/
-import javax.management.Notification;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -17,12 +19,11 @@ import static GOFO2.Main.currentPlayer;
 
 public class GUI extends JFrame implements MouseListener{
     private JCheckBox checkBox;
-    private JFrame jFrameShowPlayGround, jFrame1, loginFrame,registerFrame ,verivicationFrame;
+    private JFrame option1Frame, option2Frame, loginFrame,registerFrame ,verivicationFrame,PlayerOptionsFrame,option4Frame,showBookingInfoFrame;
     private Border border = BorderFactory.createLineBorder(Color.white, 1);
     private Border orangeBorder = BorderFactory.createLineBorder(new Color(255,134,0),2);
-    private JTextField UserEmailTF,registerNameTF,registerEmailTF,registerPhoneTF,registerLocationTF,codeTF,registerIDTF,playerEmailTF;
     private JPasswordField UserPF,registerPF;
-    private JLabel NotificationLabel,Logout2;
+    private JLabel NotificationLabel,Logout2,returnToOptions4;
     private JLabel emailLabel,PasswordLabel, returnToOptions3,returnToOptions, calcellationPeriodLabel,enterPlayerEmailLabel,teamFormationMsgLabel;
     private JLabel NewUserLabel,SignUpLabel,registerNameLabel,registerEmailLabel,registerPasswordLabel,registerPhoneLabel;
     private JLabel registerLocationLabel, errorInSignInLabel,errorInSignUpLabel,incorrectCodeLabel,verificationLabel,eWalletLabel;
@@ -41,8 +42,9 @@ public class GUI extends JFrame implements MouseListener{
     public boolean checked=false;
     private String notification;
     private String tmpName="",tmpEmail="",tmpPassword="",tmpLocation="",tmpPhone="",tmpID="";
+    private JTextField UserEmailTF,registerNameTF,registerEmailTF,registerPhoneTF,registerLocationTF,codeTF,registerIDTF,playerEmailTF;
 
-    JFrame frame, addPgFrame, updateFrame, slotsFrame, bookingFrame, eWalletFrame;
+    JFrame frame, addPgFrame, updateFrame, slotsFrame, bookingFrame, eWalletFrame,option3Frame;
     JPanel ownerHome, addUpdatePanel, slotsPanel, vBookingPanel, eWalletPanel;
     JLabel header, addHeader, updateHeader, bookingHeader, eWalletHeader, slotsHeader;
     JLabel PgNameLabel, locationLabel, sizeLabel, descriptionLabel, priceLabel, cancellationLabel, addSlots;
@@ -55,6 +57,9 @@ public class GUI extends JFrame implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if(e.getSource()==codeTF) codeTF.setBorder(border);
+        if(e.getSource() == registerIDTF) registerIDTF.setBorder(border);
+        if(e.getSource() == playerEmailTF) playerEmailTF.setBorder(border);
         if(e.getSource() == UserEmailTF) UserEmailTF.setBorder(border);
         if(e.getSource() == registerNameTF)registerNameTF.setBorder(border);
         if(e.getSource() == registerEmailTF)registerEmailTF.setBorder(border);
@@ -67,22 +72,29 @@ public class GUI extends JFrame implements MouseListener{
             setVisible(false);
         }
         if(e.getSource() == playerOptionsLabelOne) PlayerOptionOne();
-        //if(e.getSource() == playerOptionsLabelTwo) PlayerOptionTwo();
-        //if(e.getSource() == playerOptionsLabelthree) PlayerOptionThree();
-        //if(e.getSource() == playerOptionsLabelFour) PlayerOptionFour();
+        if(e.getSource() == playerOptionsLabelTwo) PlayerOptionTwo();
+        if(e.getSource() == playerOptionsLabelthree) PlayerOptionThree();
+        if(e.getSource() == playerOptionsLabelFour) PlayerOptionFour();
         if(e.getSource() == returnToOptions) {
-            jFrame1.setVisible(false);
+            option2Frame.setVisible(false);
             playerOptions();
         }
         if(e.getSource() == returnToOptions2){
+            showBookingInfoFrame.setVisible(false);
             playerOptions();
         }
         if(e.getSource() == returnToOptions3) {
             playerOptions();
+            option3Frame.setVisible(false);
+        }
+        if(e.getSource()==returnToOptions4){
+            playerOptions();
+            option4Frame.setVisible(false);
         }
         if(e.getSource() == Logout){
             currentPlayer = null;
             currentOwner = null;
+            PlayerOptionsFrame.setVisible(false);
             LoginPage();
         }
         if(e.getSource() == Logout2){
@@ -116,6 +128,9 @@ public class GUI extends JFrame implements MouseListener{
 
     @Override
     public void mouseExited(MouseEvent e) {
+        if(e.getSource()==codeTF) codeTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        if(e.getSource() == registerIDTF) registerIDTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        if(e.getSource() == playerEmailTF) playerEmailTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         if(e.getSource() == UserEmailTF) UserEmailTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         if(e.getSource() == registerNameTF)registerNameTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         if(e.getSource() == registerEmailTF)registerEmailTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -123,9 +138,6 @@ public class GUI extends JFrame implements MouseListener{
         if(e.getSource() == registerLocationTF)registerLocationTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         if(e.getSource() == UserPF)UserPF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         if(e.getSource() == registerPF)registerPF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-
-
-
     }
 
     ActionInterface obj = new ActionInterface();
@@ -333,7 +345,7 @@ public class GUI extends JFrame implements MouseListener{
      */
     private void approvedUpdatePlayground() {
         int index = currentOwner.myPlayground.getId();
-        AvailablePlaygrounds.playgrounds.get(index-1).equals(currentOwner.myPlayground);
+        AvailablePlaygrounds.playgrounds.set(index-1,currentOwner.myPlayground);
     }
 
     /**
@@ -620,7 +632,13 @@ public class GUI extends JFrame implements MouseListener{
     }
 
 
-    /*public void mail(String to,String code,String name){
+    /**
+     *This function sends email with verification code to the user via gmail smtp server
+     *
+     */
+    public void mail(String to,String code,String name){
+
+
         // Recipient's email ID needs to be mentioned.
         String from="rahma.y9079@gmail.com";
         // Assuming you are sending email from through gmails smtp
@@ -635,7 +653,7 @@ public class GUI extends JFrame implements MouseListener{
         // Get the Session object.// and pass username and password
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, "sqltoll)toll(..12*.*122");
+                return new PasswordAuthentication(from, "**********");
             }
         });
         // Used to debug SMTP issues
@@ -659,9 +677,11 @@ public class GUI extends JFrame implements MouseListener{
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
-    }*/
+    }
 
-
+    /**
+     *this function handles email validation errors
+     */
     private boolean isValid(String email)
     {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
@@ -675,24 +695,23 @@ public class GUI extends JFrame implements MouseListener{
         return pat.matcher(email).matches();
     }
 
-
-
     public GUI() {
     }
 
 
-
-
+    /**
+     * this function displays player options
+     */
     public void playerOptions(){
-        JFrame jFrame = new JFrame();
-        jFrame.setTitle("Player options");
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLayout(null);
-        jFrame.setSize(400,465);
-        jFrame.setLocation(500,100);
-        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        PlayerOptionsFrame = new JFrame();
+        PlayerOptionsFrame.setTitle("Player options");
+        PlayerOptionsFrame.setResizable(false);
+        PlayerOptionsFrame.setVisible(true);
+        PlayerOptionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        PlayerOptionsFrame.setLayout(null);
+        PlayerOptionsFrame.setSize(400,465);
+        PlayerOptionsFrame.setLocation(500,100);
+        PlayerOptionsFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
 
         welcomePlayer = new JLabel("Welcome " + currentPlayer.getName(),SwingConstants.CENTER);
@@ -746,10 +765,14 @@ public class GUI extends JFrame implements MouseListener{
         Logout.addMouseListener(this);
 
 
-        jFrame.add(welcomePlayer);jFrame.add(playerOptionsLabelOne);jFrame.add(playerOptionsLabelTwo);
-        jFrame.add(playerOptionsLabelthree);jFrame.add(playerOptionsLabelFour);jFrame.add(Logout);
+        PlayerOptionsFrame.add(welcomePlayer);PlayerOptionsFrame.add(playerOptionsLabelOne);PlayerOptionsFrame.add(playerOptionsLabelTwo);
+        PlayerOptionsFrame.add(playerOptionsLabelthree);PlayerOptionsFrame.add(playerOptionsLabelFour);PlayerOptionsFrame.add(Logout);
     }
-    public void LoginPage(){
+
+    /**
+     * this function display login page
+     */
+    public void LoginPage() {
         //TODO show options
         loginFrame = new JFrame();
         // img logo
@@ -841,6 +864,10 @@ public class GUI extends JFrame implements MouseListener{
 
 
     }
+
+    /**
+     * this function displays registration page
+     */
     public void registerPage(){
         loginFrame.setVisible(false);
         registerFrame = new JFrame();
@@ -977,6 +1004,11 @@ public class GUI extends JFrame implements MouseListener{
 
 
     }
+
+    /**
+     * this function displays verificationCodePage that asks user to enter the
+     * code sent to his email and check if it is correct
+     */
     public void verificationCodePage(){
 
         registerFrame.setVisible(false);
@@ -1023,18 +1055,21 @@ public class GUI extends JFrame implements MouseListener{
     }
 
 
-
-
+    /**
+     * this function handles the booking operation for the player,
+     * it shows available bookings, enables player to choose from them and make booking process
+     */
     public void PlayerOptionOne(){
+        PlayerOptionsFrame.setVisible(false);
         timeSlot = new TimeSlot();
-        jFrameShowPlayGround = new JFrame();
-        jFrameShowPlayGround.setResizable(false);
-        jFrameShowPlayGround.setVisible(true);
-        jFrameShowPlayGround.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrameShowPlayGround.setLayout(null);
-        jFrameShowPlayGround.setSize(500,600);
-        jFrameShowPlayGround.setLocation(500,100);
-        jFrameShowPlayGround.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        option1Frame = new JFrame();
+        option1Frame.setResizable(false);
+        option1Frame.setVisible(true);
+        option1Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        option1Frame.setLayout(null);
+        option1Frame.setSize(500,600);
+        option1Frame.setLocation(500,100);
+        option1Frame.getContentPane().setBackground(new java.awt.Color(105,105,105));
         selectTimeIntervalLabel = new JLabel("Specify time interval that suits you",SwingConstants.CENTER);
         selectTimeIntervalLabel.setBounds(90,0,300,50);
         selectTimeIntervalLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
@@ -1059,19 +1094,27 @@ public class GUI extends JFrame implements MouseListener{
         showPlaygroundsButton.setBounds(362,70,80,20);
         showPlaygroundsButton.setFont(new Font("Serif", Font.ROMAN_BASELINE, 13));
         showPlaygroundsButton.addActionListener(obj);
-        jFrameShowPlayGround.add(startTimeList);jFrameShowPlayGround.add(endTimeList);jFrameShowPlayGround.add(DaysList);
-        jFrameShowPlayGround.add(selectTimeIntervalLabel);jFrameShowPlayGround.add(showPlaygroundsButton);
+        option1Frame.add(startTimeList);
+        option1Frame.add(endTimeList);
+        option1Frame.add(DaysList);
+        option1Frame.add(selectTimeIntervalLabel);
+        option1Frame.add(showPlaygroundsButton);
     }
+
+    /**
+     * this function displays booking history for player
+     */
     public void PlayerOptionTwo(){
-        jFrame1 = new JFrame();
-        jFrame1.setTitle("");
-        jFrame1.setResizable(false);
-        jFrame1.setVisible(true);
-        jFrame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame1.setLayout(null);
-        jFrame1.setSize(350,450);
-        jFrame1.setLocation(400,100);
-        jFrame1.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        PlayerOptionsFrame.setVisible(false);
+        option2Frame = new JFrame();
+        option2Frame.setTitle("");
+        option2Frame.setResizable(false);
+        option2Frame.setVisible(true);
+        option2Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        option2Frame.setLayout(null);
+        option2Frame.setSize(350,450);
+        option2Frame.setLocation(400,100);
+        option2Frame.getContentPane().setBackground(new java.awt.Color(105,105,105));
         class MyCellRenderer extends DefaultListCellRenderer {
             public static final String HTML_1 = "<html><body style='width: ";
             public static final String HTML_2 = "px'>";
@@ -1101,20 +1144,24 @@ public class GUI extends JFrame implements MouseListener{
         returnToOptions.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
         returnToOptions.setForeground(Color.white);
         returnToOptions.addMouseListener(this);
-        jFrame1.add(scrollPane2);
-        jFrame1.add(returnToOptions);
+        option2Frame.add(scrollPane2);
+        option2Frame.add(returnToOptions);
     }
 
+    /**
+     * this function enables player to create team
+     */
     public void PlayerOptionThree(){
-        JFrame jFrame = new JFrame();
-        jFrame.setTitle("");
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLayout(null);
-        jFrame.setSize(350,350);
-        jFrame.setLocation(500,100);
-        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        PlayerOptionsFrame.setVisible(false);
+        option3Frame = new JFrame();
+        option3Frame.setTitle("");
+        option3Frame.setResizable(false);
+        option3Frame.setVisible(true);
+        option3Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        option3Frame.setLayout(null);
+        option3Frame.setSize(350,350);
+        option3Frame.setLocation(500,100);
+        option3Frame.getContentPane().setBackground(new java.awt.Color(105,105,105));
         enterPlayerEmailLabel = new JLabel("Enter member email:",SwingConstants.LEFT);
         enterPlayerEmailLabel.setBounds(5,10,345,35);
         enterPlayerEmailLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
@@ -1141,42 +1188,57 @@ public class GUI extends JFrame implements MouseListener{
         returnToOptions3.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
         returnToOptions3.setForeground(Color.white);
         returnToOptions3.addMouseListener(this);
-        jFrame.add(enterPlayerEmailLabel);jFrame.add(playerEmailTF);jFrame.add(addButton);jFrame.add(teamFormationMsgLabel);
-        jFrame.add(returnToOptions3);
+        option3Frame.add(enterPlayerEmailLabel);option3Frame.add(playerEmailTF);option3Frame.add(addButton);option3Frame.add(teamFormationMsgLabel);
+        option3Frame.add(returnToOptions3);
     }
 
+    /**
+     * this function shows notification of a member team
+     */
     public void PlayerOptionFour(){
-        JFrame jFrame = new JFrame();
-        jFrame.setTitle("");
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLayout(null);
-        jFrame.setSize(300,300);
-        jFrame.setLocation(400,100);
-        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
-        notification = "lsdkjlkjlsdjl\n kjhsdjkhdjkhdkjhkjhd\n dshjhjhfgjhdgf\n sduytuyetututeut\nvnxvcn\n";
-        NotificationLabel = new JLabel("<html>" + notification.replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>") + "</html>");
-        NotificationLabel.setBounds(10,10,265,240);
+        PlayerOptionsFrame.setVisible(false);
+        option4Frame = new JFrame();
+        option4Frame.setTitle("");
+        option4Frame.setResizable(false);
+        option4Frame.setVisible(true);
+        option4Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        option4Frame.setLayout(null);
+        option4Frame.setSize(300,300);
+        option4Frame.setLocation(400,100);
+        option4Frame.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        NotificationLabel = new JLabel("<html>" + currentPlayer.getNotification().replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>") + "</html>");
+        NotificationLabel.setBounds(10,10,265,220);
         NotificationLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         NotificationLabel.setForeground(Color.white);
         NotificationLabel.setBorder(border);
-        jFrame.add(NotificationLabel);
+
+
+        returnToOptions4 = new JLabel("Back to options");
+        returnToOptions4.setBounds(170,235,100,20);
+        returnToOptions4.setFont(new Font(Font.DIALOG, Font.PLAIN, 14));
+        returnToOptions4.setForeground(Color.white);
+        returnToOptions4.addMouseListener(this);
+        option4Frame.add(NotificationLabel);option4Frame.add(returnToOptions4);
     }
+
+    /**
+     * this function shows count down timer initialized by the cancellation period and
+     * a cancel button to cancel the booking process
+     */
     public void showBookingInfo(Booking booking){
 
         System.out.println("player money"+currentPlayer.getUserEwallet().getCurrentMoney());
         System.out.println("booking money" + booking.bookingWallet.getCurrentMoney());
 
 
-        JFrame jFrame = new JFrame();
-        jFrame.setResizable(false);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.setLayout(null);
-        jFrame.setSize(300,330);
-        jFrame.setLocation(500,100);
-        jFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
+        showBookingInfoFrame = new JFrame();
+        showBookingInfoFrame.setResizable(false);
+        showBookingInfoFrame.setVisible(true);
+        showBookingInfoFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        showBookingInfoFrame.setLayout(null);
+        showBookingInfoFrame.setSize(300,330);
+        showBookingInfoFrame.setLocation(500,100);
+        showBookingInfoFrame.getContentPane().setBackground(new java.awt.Color(105,105,105));
 
 
         calcellationPeriodLabel = new JLabel("Cancellation period ends in",SwingConstants.CENTER);
@@ -1237,13 +1299,18 @@ public class GUI extends JFrame implements MouseListener{
         returnToOptions2.addMouseListener(this);
 
 
-        jFrame.add(secondsLabel);jFrame.add(minutesLabel);jFrame.add(CancelButton);jFrame.add(calcellationPeriodLabel);
-        jFrame.add(returnToOptions2);
+        showBookingInfoFrame.add(secondsLabel);showBookingInfoFrame.add(minutesLabel);showBookingInfoFrame.add(CancelButton);showBookingInfoFrame.add(calcellationPeriodLabel);
+        showBookingInfoFrame.add(returnToOptions2);
 
     }
 
+
     private class ActionInterface implements ActionListener {
 
+        /**
+         * this function handles all button action events in the application
+         * @param e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             String accountType="";
@@ -1394,8 +1461,8 @@ public class GUI extends JFrame implements MouseListener{
                 for(Player player:Account.Players){
                     if(player.getEmail().equals(mail)){
                         found=true;
-                        //currentPlayer.team = new Team();
-                        //currentPlayer.team.teamList.add(player);
+                        currentPlayer.team = new Team();
+                        currentPlayer.team.teamList.add(player);
                         teamFormationMsgLabel.setText("Added successfully");
                         break;
                     }
@@ -1415,8 +1482,6 @@ public class GUI extends JFrame implements MouseListener{
 
                 AvailablePlaygrounds availablePlaygrounds = new AvailablePlaygrounds();
                 availablePlaygrounds.fillItemsVector(timeSlot);
-
-
                 class MyCellRenderer extends DefaultListCellRenderer {
                     public static final String HTML_1 = "<html><body style='width: ";
                     public static final String HTML_2 = "px'>";
@@ -1448,8 +1513,8 @@ public class GUI extends JFrame implements MouseListener{
                 checkBox= new JCheckBox("Invite your team");
                 checkBox.setBounds(340,500,120,20);
                 checkBox.setBackground(new java.awt.Color(105,105,105));
-                jFrameShowPlayGround.add(checkBox);
-                checkBox.addItemListener(new ItemListener() {
+                option1Frame.add(checkBox);
+                checkBox.addItemListener(new ItemListener(){
                     @Override
                     public void itemStateChanged(ItemEvent e) {
                         if(e.getStateChange()==1) checked = true;
@@ -1463,7 +1528,8 @@ public class GUI extends JFrame implements MouseListener{
                 confirmBooking.setFont(new Font("Serif", Font.ROMAN_BASELINE, 17));
                 confirmBooking.addActionListener(obj);
 
-                jFrameShowPlayGround.add(scrollPane);jFrameShowPlayGround.add(confirmBooking);
+                option1Frame.add(scrollPane);
+                option1Frame.add(confirmBooking);
             }
             if(e.getSource()==confirmBooking){
                 ItemIndex = list1.getSelectedIndex();
@@ -1485,12 +1551,15 @@ public class GUI extends JFrame implements MouseListener{
                     System.out.println("gonna show booking info");
                     showBookingInfo(booking);
                     System.out.println("must be showed");
+                    option1Frame.setVisible(false);
                 }
 
-          /*      for(Player player:currentPlayer.team.teamList){
-                    notification = currentPlayer.getName()+"Invites you to play\n playground info: "+booking.item.toString();
-                    player.setNotification(notification);
-                }*/
+                if(checked){
+                    for(Player player:currentPlayer.team.teamList){
+                        notification = currentPlayer.getName()+"Invites you to play\n playground info: "+booking.item.toString();
+                        player.setNotification(notification);
+                    }
+                }
 
             }
             if(e.getSource()==CancelButton){
