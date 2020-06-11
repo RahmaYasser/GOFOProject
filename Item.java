@@ -8,6 +8,11 @@ public class Item {
     public double size, pricePerHour;
     public int cancellationPeriod,i,j;
     public TimeSlot timeSlot;
+    public PlaygroundOwner playgroundOwner;
+
+    public Item() {
+        timeSlot = new TimeSlot();
+    }
 
     @Override
     public String toString() {
