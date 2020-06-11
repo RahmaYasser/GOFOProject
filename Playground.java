@@ -1,6 +1,7 @@
 package GOFO2;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Playground {
     private String name, location, description;
@@ -16,17 +17,13 @@ public class Playground {
     }
 
     private int id;
-    private ArrayList<TimeSlot> timeSlot = new ArrayList<>();
+
+
+    ArrayList<TimeSlot> timeSlot = new ArrayList<>();
     public boolean Available[];
-    private PlaygroundOwner playgroundOwner;
+    public PlaygroundOwner playgroundOwner;
 
-    public void setPlaygroundOwner(PlaygroundOwner playgroundOwner) {
-        this.playgroundOwner = playgroundOwner;
-    }
 
-    public PlaygroundOwner getPlaygroundOwner() {
-        return playgroundOwner;
-    }
 
     public Playground() {
         Available = new boolean[50];
