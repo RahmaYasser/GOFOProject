@@ -14,8 +14,8 @@ public class Player extends User{
         return notification;
     }
 
-    public Player(String id, String name, String location, String email, String password, String phone, eWallet userEwallet) {
-        super(id, name, location, email, password, phone, userEwallet);
+    public Player( String name, String location, String email, String password, String phone, eWallet userEwallet) {
+        super( name, location, email, password, phone, userEwallet);
         bookingHistory = new Vector<>();
 
     }
@@ -23,6 +23,7 @@ public class Player extends User{
     public Team team;
     public Vector<Booking> bookingHistory;
     public Player(){
+
         bookingHistory = new Vector<>();
         team = new Team();
     }
