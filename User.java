@@ -1,15 +1,22 @@
 package GOFO2;
 public class User {
-    private int id;
     private String name, location, email, password, phone;
     private eWallet userEwallet;
 
-    public int getId() {
-        return id;
+    public User() {
+        userEwallet = new eWallet();
     }
-    public void setId(int id) {
-        this.id = id;
+
+    public User( String name, String location, String email, String password, String phone, eWallet userEwallet) {
+        this.name = name;
+        this.location = location;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.userEwallet = userEwallet;
     }
+
+
 
     public String getName() {
         return name;
@@ -49,15 +56,6 @@ public class User {
     public eWallet getUserEwallet() {
         return userEwallet;
     }
-    public void setUserEwallet(eWallet userEwallet) {
-        this.userEwallet = userEwallet;
-    }
 
-    public void registeration() {
 
-    }
-
-    public void login() {
-
-    }
 }
