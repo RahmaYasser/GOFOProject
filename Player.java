@@ -5,6 +5,14 @@ import java.util.Vector;
 
 public class Player extends User{
     private String notification="You didn't receive messages yet";
+    public Team team;
+    public Vector<Booking> bookingHistory;
+    
+    public Player(){
+
+        bookingHistory = new Vector<>();
+        team = new Team();
+    }
 
     public void setNotification(String notification) {
         this.notification = notification;
@@ -18,13 +26,5 @@ public class Player extends User{
         super( name, location, email, password, phone, userEwallet);
         bookingHistory = new Vector<>();
 
-    }
-
-    public Team team;
-    public Vector<Booking> bookingHistory;
-    public Player(){
-
-        bookingHistory = new Vector<>();
-        team = new Team();
     }
 }
