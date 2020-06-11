@@ -7,15 +7,6 @@ public class Playground {
     private String name, location, description;
     private double size, pricePerHour;
     private int cancellationPeriod;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     private int id;
 
 
@@ -24,10 +15,17 @@ public class Playground {
     public PlaygroundOwner playgroundOwner;
 
 
-
     public Playground() {
         Available = new boolean[50];
         for(int i=0;i<50;i++) Available[i] = true;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
