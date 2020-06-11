@@ -1,7 +1,4 @@
 package GOFO2;
-/*import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;*/
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -17,6 +14,9 @@ import static GOFO2.Main.currentOwner;
 import static GOFO2.Main.currentPlayer;
 
 
+/**
+ * This class includes all gui of the player frames and playground owner frames
+ */
 public class GUI extends JFrame implements MouseListener{
     private JCheckBox checkBox;
     private JFrame option1Frame, option2Frame, loginFrame,registerFrame ,verivicationFrame,PlayerOptionsFrame,option4Frame,showBookingInfoFrame;
@@ -36,6 +36,7 @@ public class GUI extends JFrame implements MouseListener{
     private JComboBox DaysList,startTimeList,endTimeList;
     private JScrollPane scrollPane;
     private JList list1,list2;
+    
     static int ItemIndex=0,BookingIndex=0, generatedCode;
     static boolean state;
     TimeSlot timeSlot;
@@ -54,6 +55,8 @@ public class GUI extends JFrame implements MouseListener{
     JButton addPgButton, updatePgButton, vBookingButton, eWalletButton = new JButton("Status & eWallet");
     JButton addPlaygroundButton, updateButton, done;
     JButton addBack, updateBack, bookingBack, eWalletBack;
+    
+    public GUI() {}
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -98,7 +101,6 @@ public class GUI extends JFrame implements MouseListener{
             LoginPage();
         }
         if(e.getSource() == Logout2){
-            System.out.println("log");
             currentPlayer = null;
             currentOwner = null;
             frame.setVisible(false);
@@ -432,6 +434,9 @@ public class GUI extends JFrame implements MouseListener{
         addSlots.addMouseListener(this);
     }
 
+    /**
+     * to build add slot frame
+     */
     public void addSlotsFrame() {
         slotsFrame = new JFrame();
         slotsFrame.setTitle("GoFo");
@@ -492,6 +497,9 @@ public class GUI extends JFrame implements MouseListener{
         done.addActionListener(obj);
     }
 
+    /**
+     * take owner's inputs to set slot to his playground
+     */
     public void storeSlots() {
         if (!dayText.getText().contentEquals("") && !fromText.getText().contentEquals("") && !toText.getText().contentEquals("")) {
             TimeSlot slot = new TimeSlot();
@@ -543,7 +551,7 @@ public class GUI extends JFrame implements MouseListener{
 
         list.setBackground(Color.WHITE);
         list.setForeground(Color.black);
-        list.setBounds(40, 130, 200, 200);
+        list.setBounds(10, 130, 265, 200);
         MyCellRenderer cellRenderer = new MyCellRenderer(200);
         list.setCellRenderer(cellRenderer);
 
@@ -573,11 +581,6 @@ public class GUI extends JFrame implements MouseListener{
             currentOwner.slots.add(currentOwner.bookingHistory.get(i).item.timeSlot.getDay() + "From " + String.valueOf(currentOwner.bookingHistory.get(i).item.timeSlot.getStartTime()) + " to "
                     + String.valueOf(currentOwner.bookingHistory.get(i).item.timeSlot.getEndTime()));
         }
-       /* System.out.println("slots title");
-        for (int i = 0 ; i < currentOwner.myPlayground.timeSlot.size() ; i++) {
-            currentOwner.slots.add(currentOwner.myPlayground.timeSlot.get(i).getDay() + ", From " + String.valueOf(currentOwner.myPlayground.timeSlot.get(i).getStartTime()) + " to "
-                    + String.valueOf(currentOwner.myPlayground.timeSlot.get(i).getEndTime()));
-        }*/
     }
 
     /**
@@ -681,6 +684,7 @@ public class GUI extends JFrame implements MouseListener{
 
     /**
      *this function handles email validation errors
+     *@param email is the user's email input
      */
     private boolean isValid(String email)
     {
@@ -693,9 +697,6 @@ public class GUI extends JFrame implements MouseListener{
         if (email == null)
             return false;
         return pat.matcher(email).matches();
-    }
-
-    public GUI() {
     }
 
 
@@ -718,7 +719,6 @@ public class GUI extends JFrame implements MouseListener{
         welcomePlayer.setBackground(new java.awt.Color(105,105,105));
         welcomePlayer.setForeground(Color.white);
         welcomePlayer.setBounds(5,0,375,70);
-        //welcomePlayer.setBorder(border);
         welcomePlayer.setFont(new Font("Serif", Font.BOLD, 28));
 
 
@@ -1356,9 +1356,6 @@ public class GUI extends JFrame implements MouseListener{
                 }
                 for( PlaygroundOwner playgroundOwner1:Account.Owners){
 
-                    System.out.println("account owner email"+playgroundOwner1.getEmail());
-                    System.out.println("account owner pass"+playgroundOwner1.getPassword());
-
                     if(playgroundOwner1.getEmail().equals(email) && playgroundOwner1.getPassword().equals(password)){
                         currentOwner = playgroundOwner1;
                         ownerOptions();
@@ -1374,8 +1371,6 @@ public class GUI extends JFrame implements MouseListener{
             if(e.getSource()==verificationButton){
 
                 String enteredCode = codeTF.getText().toString();
-                System.out.println("this is x:"+ String.valueOf(generatedCode));
-                System.out.println("This is the codeeeeee   "+codeTF.getText().toString());
                 if(enteredCode.equals(String.valueOf(generatedCode))){
 
                     if(accountType.equals("p")){
@@ -1543,7 +1538,6 @@ public class GUI extends JFrame implements MouseListener{
                     System.out.println("player has enough money");
                     booking.item=AvailablePlaygrounds.items.get(ItemIndex);
                     currentPlayer.bookingHistory.add(booking);
-                    //PlaygroundOwner playgroundOwner = new PlaygroundOwner();
                     booking.item.playgroundOwner.bookingHistory.add(booking);
                     currentPlayer.getUserEwallet().setCurrentMoney(currentPlayer.getUserEwallet().getCurrentMoney()-booking.Price);
                     booking.bookingWallet.setCurrentMoney(booking.Price);
@@ -1592,3 +1586,4 @@ public class GUI extends JFrame implements MouseListener{
     }
 
 }
+
