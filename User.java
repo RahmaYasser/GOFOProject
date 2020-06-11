@@ -1,4 +1,8 @@
 package GOFO2;
+
+/**
+ * The user class is a parent class that includes the main details of any user.
+ */
 public class User {
     private String name, location, email, password, phone;
     private eWallet userEwallet;
@@ -15,7 +19,6 @@ public class User {
         this.phone = phone;
         this.userEwallet = userEwallet;
     }
-
 
 
     public String getName() {
