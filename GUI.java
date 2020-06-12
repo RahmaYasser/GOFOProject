@@ -1,4 +1,7 @@
 package GOFO2;
+/*import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;*/
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -13,10 +16,10 @@ import javax.swing.Timer;
 import static GOFO2.Main.currentOwner;
 import static GOFO2.Main.currentPlayer;
 
-
 /**
  * This class includes all gui of the player frames and playground owner frames
  */
+
 public class GUI extends JFrame implements MouseListener{
     private JCheckBox checkBox;
     private JFrame option1Frame, option2Frame, loginFrame,registerFrame ,verivicationFrame,PlayerOptionsFrame,option4Frame,showBookingInfoFrame;
@@ -36,7 +39,6 @@ public class GUI extends JFrame implements MouseListener{
     private JComboBox DaysList,startTimeList,endTimeList;
     private JScrollPane scrollPane;
     private JList list1,list2;
-    
     static int ItemIndex=0,BookingIndex=0, generatedCode;
     static boolean state;
     TimeSlot timeSlot;
@@ -55,8 +57,6 @@ public class GUI extends JFrame implements MouseListener{
     JButton addPgButton, updatePgButton, vBookingButton, eWalletButton = new JButton("Status & eWallet");
     JButton addPlaygroundButton, updateButton, done;
     JButton addBack, updateBack, bookingBack, eWalletBack;
-    
-    public GUI() {}
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -434,9 +434,6 @@ public class GUI extends JFrame implements MouseListener{
         addSlots.addMouseListener(this);
     }
 
-    /**
-     * to build add slot frame
-     */
     public void addSlotsFrame() {
         slotsFrame = new JFrame();
         slotsFrame.setTitle("GoFo");
@@ -497,9 +494,6 @@ public class GUI extends JFrame implements MouseListener{
         done.addActionListener(obj);
     }
 
-    /**
-     * take owner's inputs to set slot to his playground
-     */
     public void storeSlots() {
         if (!dayText.getText().contentEquals("") && !fromText.getText().contentEquals("") && !toText.getText().contentEquals("")) {
             TimeSlot slot = new TimeSlot();
@@ -551,7 +545,7 @@ public class GUI extends JFrame implements MouseListener{
 
         list.setBackground(Color.WHITE);
         list.setForeground(Color.black);
-        list.setBounds(10, 130, 265, 200);
+        list.setBounds(40, 130, 200, 200);
         MyCellRenderer cellRenderer = new MyCellRenderer(200);
         list.setCellRenderer(cellRenderer);
 
@@ -641,7 +635,6 @@ public class GUI extends JFrame implements MouseListener{
      */
     public void mail(String to,String code,String name){
 
-
         // Recipient's email ID needs to be mentioned.
         String from="rahma.y9079@gmail.com";
         // Assuming you are sending email from through gmails smtp
@@ -656,7 +649,7 @@ public class GUI extends JFrame implements MouseListener{
         // Get the Session object.// and pass username and password
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, "**********");
+                return new PasswordAuthentication(from, "************");
             }
         });
         // Used to debug SMTP issues
@@ -669,14 +662,12 @@ public class GUI extends JFrame implements MouseListener{
             // Set To: header field of the header.
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             // Set Subject: header field
-            message.setSubject("This is the Subject Line!");
+            message.setSubject("GOFO");
             // Now set the actual message
-            message.setText("Hey"+ name+"\n" +
+            message.setText("Hey "+ name+"\n" +
                     " here is your authentication code for GOFO Account\n" + code+"\n\n"+ "best regards\n");
-            System.out.println("sending...");
             // Send message
             Transport.send(message);
-            System.out.println("Sent message successfully....");
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
@@ -684,7 +675,6 @@ public class GUI extends JFrame implements MouseListener{
 
     /**
      *this function handles email validation errors
-     *@param email is the user's email input
      */
     private boolean isValid(String email)
     {
@@ -697,6 +687,9 @@ public class GUI extends JFrame implements MouseListener{
         if (email == null)
             return false;
         return pat.matcher(email).matches();
+    }
+
+    public GUI() {
     }
 
 
@@ -1054,7 +1047,6 @@ public class GUI extends JFrame implements MouseListener{
         verivicationFrame.add(verificationLabel);
     }
 
-
     /**
      * this function handles the booking operation for the player,
      * it shows available bookings, enables player to choose from them and make booking process
@@ -1227,10 +1219,6 @@ public class GUI extends JFrame implements MouseListener{
      */
     public void showBookingInfo(Booking booking){
 
-        System.out.println("player money"+currentPlayer.getUserEwallet().getCurrentMoney());
-        System.out.println("booking money" + booking.bookingWallet.getCurrentMoney());
-
-
         showBookingInfoFrame = new JFrame();
         showBookingInfoFrame.setResizable(false);
         showBookingInfoFrame.setVisible(true);
@@ -1329,8 +1317,7 @@ public class GUI extends JFrame implements MouseListener{
                 if(tmpEmail.equals("")|| tmpLocation.equals("")||tmpName.equals("")||tmpPassword.equals("")||tmpPhone.equals("") || accountType.equals("") || tmpID.equals("")) errorInSignUpLabel.setText("Please enter all sections");
                 else if(isValid(tmpEmail)){
                     generatedCode = (int) (Math.random() * (89467892 - 34278564 + 1)) + 34278564;
-                    // mail(tmpEmail,String.valueOf(generatedCode),tmpName);
-                    System.out.println(generatedCode);
+                    mail(tmpEmail,String.valueOf(generatedCode),tmpName);
                     registerFrame.setVisible(false);
                     verificationCodePage();
                 }
@@ -1342,8 +1329,6 @@ public class GUI extends JFrame implements MouseListener{
             if(e.getSource() == LoginButton) {
                 String email = UserEmailTF.getText().toString();
                 String password = new String(UserPF.getPassword());
-
-                boolean foundInPlayer=false,foundInOwner=false;
                 for(Player player1:Account.Players){
 
                     if(player1.getEmail().equals(email) && player1.getPassword().equals(password)){
@@ -1355,6 +1340,7 @@ public class GUI extends JFrame implements MouseListener{
                     }
                 }
                 for( PlaygroundOwner playgroundOwner1:Account.Owners){
+
 
                     if(playgroundOwner1.getEmail().equals(email) && playgroundOwner1.getPassword().equals(password)){
                         currentOwner = playgroundOwner1;
@@ -1528,29 +1514,24 @@ public class GUI extends JFrame implements MouseListener{
             }
             if(e.getSource()==confirmBooking){
                 ItemIndex = list1.getSelectedIndex();
-                System.out.println(ItemIndex);
                 Booking booking = new Booking();
                 int numOfHours;
-                //if(timeSlot!=null)numOfHours = (timeSlot.getEndTime() - timeSlot.getStartTime());
                 numOfHours = AvailablePlaygrounds.items.get(ItemIndex).timeSlot.getEndTime()-AvailablePlaygrounds.items.get(ItemIndex).timeSlot.getStartTime();
                 booking.Price = AvailablePlaygrounds.items.get(ItemIndex).pricePerHour *numOfHours;
                 if(currentPlayer.getUserEwallet().getCurrentMoney() >=booking.Price){
-                    System.out.println("player has enough money");
                     booking.item=AvailablePlaygrounds.items.get(ItemIndex);
                     currentPlayer.bookingHistory.add(booking);
                     booking.item.playgroundOwner.bookingHistory.add(booking);
                     currentPlayer.getUserEwallet().setCurrentMoney(currentPlayer.getUserEwallet().getCurrentMoney()-booking.Price);
                     booking.bookingWallet.setCurrentMoney(booking.Price);
                     AvailablePlaygrounds.playgrounds.get(booking.item.i).Available[booking.item.j] = false;
-                    System.out.println("gonna show booking info");
                     showBookingInfo(booking);
-                    System.out.println("must be showed");
                     option1Frame.setVisible(false);
                 }
 
                 if(checked){
                     for(Player player:currentPlayer.team.teamList){
-                        notification = currentPlayer.getName()+"Invites you to play\n playground info: "+booking.item.toString();
+                        notification = currentPlayer.getName()+" Invites you to play\n playground info: "+booking.item.toString();
                         player.setNotification(notification);
                     }
                 }
@@ -1562,19 +1543,13 @@ public class GUI extends JFrame implements MouseListener{
                 Booking booking = currentPlayer.bookingHistory.get(currentPlayer.bookingHistory.size()-1);
                 booking.bookingWallet.setCurrentMoney(0);
                 currentPlayer.getUserEwallet().setCurrentMoney(currentPlayer.getUserEwallet().getCurrentMoney()+booking.Price);
-                System.out.println("booking price after cancellation"+ booking.Price);
-                System.out.println("player money after cancellation" + currentPlayer.getUserEwallet().getCurrentMoney());
 
                 // booking history removing
                 PlaygroundOwner playgroundOwner;
-                System.out.println("player booking history"+currentPlayer.bookingHistory.size());
                 playgroundOwner = AvailablePlaygrounds.items.get(ItemIndex).playgroundOwner;
                 currentPlayer.bookingHistory.remove(currentPlayer.bookingHistory.size()-1);
-                System.out.println("player booking history"+currentPlayer.bookingHistory.size());
 
-                System.out.println("owner booking history"+playgroundOwner.bookingHistory.size());
                 playgroundOwner.bookingHistory.remove(playgroundOwner.bookingHistory.size()-1);
-                System.out.println("owner booking history"+playgroundOwner.bookingHistory.size());
                 Item item = AvailablePlaygrounds.items.get(ItemIndex);
 
                 // this slot is now available
@@ -1586,4 +1561,3 @@ public class GUI extends JFrame implements MouseListener{
     }
 
 }
-
